@@ -1,69 +1,90 @@
-# Personal Web App
+<!--
+CP2077 DESIGN SYSTEM APPLIED
+-->
+
+# ![CP2077 Logo](https://via.placeholder.com/150x50?text=CP2077+Design) Personal Web App
+
+![Java](https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Postgres](https://img.shields.io/badge/Postgres-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
 
 This repository contains a personal portfolio / resume web application with a Next.js frontend and a Spring Boot backend. The app provides a public profile, project list, experience timeline, and a contact form; there are admin endpoints protected by JWT for reading contact messages.
 
 ---
 
-## Repository layout
+## Repository Layout
 
-- backend/ — Spring Boot (Java 21, Maven)
-  - src/ — Java sources (controllers, services, models, repositories)
-  - run-dev.sh — development helper (reads .env)
-  - .env.example — example env variables (copy to .env)
-  - HELP.md — developer notes and references
-- frontend/ — Next.js (React 19 / Next 16)
-  - src/ — React components and pages
-  - public/ — static assets
-  - package.json — scripts: `dev`, `build`, `start`
+![Layout](https://via.placeholder.com/800x200?text=Repository+Layout+Diagram)
+
+- **backend/** — Spring Boot (Java 21, Maven)
+  - **src/** — Java sources (controllers, services, models, repositories)
+  - **run-dev.sh** — development helper (reads .env)
+  - **.env.example** — example env variables (copy to .env)
+  - **HELP.md** — developer notes and references
+- **frontend/** — Next.js (React 19 / Next 16)
+  - **src/** — React components and pages
+  - **public/** — static assets
+  - **package.json** — scripts: `dev`, `build`, `start`
 
 ---
 
 ## Technologies
 
-- Backend: Java 21, Spring Boot 3.x, Spring Data JPA, Spring Security, jjwt, Postgres
-- Frontend: Next.js (app router), React 19, TailwindCSS (dev deps), Framer Motion
-- Database: Postgres (supabase URL present in application-dev.yml)
-- Auth: JWT for admin endpoints; admin credentials via `admin.password-hash`
+![Tech Stack](https://via.placeholder.com/800x150?text=Tech+Stack+Overview)
+
+- **Backend**: Java 21, Spring Boot 3.x, Spring Data JPA, Spring Security, jjwt, Postgres
+- **Frontend**: Next.js (app router), React 19, TailwindCSS (dev deps), Framer Motion
+- **Database**: Postgres (supabase URL present in application-dev.yml)
+- **Auth**: JWT for admin endpoints; admin credentials via `admin.password-hash`
 
 ---
 
-## Quick start (local)
+## Quick Start (Local)
 
-Prereqs: Java 21, Maven (or use included mvnw), Node 18+, npm/yarn/pnpm
+### Prerequisites
 
-1) Backend
+![Prerequisites](https://via.placeholder.com/800x100?text=Java+21,+Node+18,+Maven)
 
-- Copy example env: `cp backend/.env.example backend/.env` and fill secrets (SUPABASE_DB_PASSWORD, JWT_SECRET, MAIL_USER, MAIL_PASS, optional admin.username and admin.password-hash)
-- Start backend in dev profile (reads .env):
+1. **Backend**
 
-  cd backend
-  ./run-dev.sh
+   - Copy example env: `cp backend/.env.example backend/.env` and fill secrets (SUPABASE_DB_PASSWORD, JWT_SECRET, MAIL_USER, MAIL_PASS, optional admin.username and admin.password-hash)
+   - Start backend in dev profile (reads .env):
 
-  Or with Maven wrapper:
-  ./mvnw spring-boot:run
+     ```bash
+     cd backend
+     ./run-dev.sh
 
-Backend listens on :8080 by default (see application-dev.yml). CORS_ORIGIN defaults to `http://localhost:3000`.
+     # Or with Maven wrapper:
+     ./mvnw spring-boot:run
+     ```
 
-2) Frontend
+   Backend listens on :8080 by default (see application-dev.yml). CORS_ORIGIN defaults to `http://localhost:3000`.
 
-  cd frontend
-  npm install
-  npm run dev
+2. **Frontend**
 
-Open http://localhost:3000 to view the site. The frontend talks to the backend using relative `/api/*` endpoints; when running separately the backend must allow CORS from the frontend origin.
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) to view the site. The frontend talks to the backend using relative `/api/*` endpoints; when running separately the backend must allow CORS from the frontend origin.
 
 ---
 
-## Environment variables (backend)
+## Environment Variables (Backend)
 
 The backend expects the following (see backend/.env.example):
 
-- SUPABASE_DB_PASSWORD — Postgres password
-- JWT_SECRET — secret used to sign JWT tokens
-- MAIL_USER / MAIL_PASS — SMTP credentials for sending contact emails
-- CORS_ORIGIN — allowed origin for browser requests (defaults to http://localhost:3000)
-- admin.username (optional) — admin username (defaults to `admin`)
-- admin.password-hash (recommended) — bcrypt hash of the admin password
+- **SUPABASE_DB_PASSWORD** — Postgres password
+- **JWT_SECRET** — secret used to sign JWT tokens
+- **MAIL_USER / MAIL_PASS** — SMTP credentials for sending contact emails
+- **CORS_ORIGIN** — allowed origin for browser requests (defaults to http://localhost:3000)
+- **admin.username** (optional) — admin username (defaults to `admin`)
+- **admin.password-hash** (recommended) — bcrypt hash of the admin password
 
 To generate a bcrypt password hash, you can use Python + bcrypt:
 
@@ -75,18 +96,20 @@ Set the resulting string as `admin.password-hash` in your .env.
 
 ---
 
-## Important HTTP API endpoints
+## Important HTTP API Endpoints
 
-- GET /api/profile — returns profile metadata (name, bio, socials, skills)
-- GET /api/projects — list projects (supports `?featured=true`)
-- GET /api/projects/{id} — get project details
-- GET /api/experience — list experience entries
-- POST /api/contact — submit contact message (body: name, email, subject, body)
+![API Endpoints](https://via.placeholder.com/800x150?text=API+Endpoints)
 
-Admin (requires JWT from /api/admin/auth/login):
-- POST /api/admin/auth/login — { username, password } → { token }
-- GET /api/admin/messages — list received contact messages
-- PATCH /api/admin/messages/{id}/read — toggle read flag
+- **GET /api/profile** — returns profile metadata (name, bio, socials, skills)
+- **GET /api/projects** — list projects (supports `?featured=true`)
+- **GET /api/projects/{id}** — get project details
+- **GET /api/experience** — list experience entries
+- **POST /api/contact** — submit contact message (body: name, email, subject, body)
+
+**Admin (requires JWT from /api/admin/auth/login):**
+- **POST /api/admin/auth/login** — { username, password } → { token }
+- **GET /api/admin/messages** — list received contact messages
+- **PATCH /api/admin/messages/{id}/read** — toggle read flag
 
 Example: login and read messages (curl)
 
