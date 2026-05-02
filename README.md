@@ -136,4 +136,35 @@ See REMAINING_WORK.md for planned improvements and tasks. The project already su
 
 ---
 
-If anything in this README is out of date, open an issue or update the file with corrected instructions. Happy hacking!
+Project vision & design reference
+
+This project is inspired by the CP2077 design bible in the repo (CP2077_DESIGN_BIBLE.html). That design document is the creative reference for the visual language, copy tone, and section composition — use it when making UI/UX decisions. Key mappings:
+
+- Tone: cyberpunk, neon, retro-futuristic copy and microcopy.
+- Visuals: prioritize high-contrast neon palettes, film-grain/scanline overlays (see frontend components/ScanlineOverlay.tsx), and subtle motion (framer-motion) to match the design bible.
+- Content: mirror the layout and hierarchy in the bible — hero/profile, featured projects, experience timeline, and CTA/contact.
+
+Customization & where to change content
+
+- Frontend assets: frontend/public contains svg and static assets referenced by the UI. Replace or add assets and update component imports.
+- Theme & styles: Tailwind and component styles live in the frontend code. Update Tailwind config or component classNames to adjust palettes and spacing.
+- Profile & content: the backend seed (backend/src/main/java/com/resume/SeedRunner.java) contains example data used in dev profile. Change it or update the DB directly to change site content.
+
+Styling & implementation notes
+
+- Animations: use framer-motion (already included) for page-level and component micro-interactions.
+- Accessibility: preserve semantic structure (headings, aria-* attributes) when applying themed visuals.
+- Images: prefer optimized web formats (avif/webp) and host large assets via CDN for production.
+
+CI / Badges / Deployment
+
+- Add GitHub Actions workflows to run `./mvnw -q test` and `npm ci && npm run build` on push to main.
+- Suggested status badges: build (backend), frontend build, tests, and deploy (Vercel/GH Pages).
+
+Contributing
+
+If you want to extend the design or features to match CP2077 bible more closely, open an issue outlining the UI change and link to the sections of CP2077_DESIGN_BIBLE.html you are implementing.
+
+Contact
+
+For repo-level questions, open an issue or reach out by creating a PR with proposed changes. Happy hacking!
