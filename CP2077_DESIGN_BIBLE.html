@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CP2077 UI Design Bible — Vilimovský / CDPR</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   OFFICIAL CP2077 DESIGN SYSTEM — NEO MILITARISM
+   Source: Vladimír Vilimovský, Senior UI Artist, CDPR
+   behance.net/gallery/118663901 + /133185623
+   Game Days 2022 Talk + Fonts In Use confirmation
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+  /* ── OFFICIAL PALETTE (confirmed: color-hex.com/color-palette/1041326) ── */
+  --red:        #C5003C;   /* PRIMARY — Neo Militarism player UI red */
+  --red-dark:   #880425;   /* Deep pressed/fill red */
+  --red-glow:   #FF003C;   /* Neon bloom layer */
+  --yellow:     #F3E600;   /* SECONDARY accent */
+  --yellow-alt: #FCEC0C;   /* Art Bible yellow variant */
+  --teal:       #55EAD4;   /* TERTIARY — hacker/NET contexts */
+  --teal-dark:  #136377;   /* Dark teal variant */
+  --gold:       #D8BC66;   /* Neo Kitsch / item tier indicator */
+  --olive:      #978D01;   /* Inactive/disabled */
+  --warm-gray:  #D1C5C0;   /* Body text */
+  --earth:      #58482C;   /* Entropism reference */
+
+  /* ── SURFACES ── */
+  --black:      #000000;
+  --bg:         #050608;
+  --surface:    #0D0D0D;
+  --surface-2:  #111318;
+  --surface-3:  #161820;
+  --border:     #1C2030;
+  --border-2:   #252840;
+  --muted:      #3A4060;
+  --text-dim:   #606880;
+  --text:       #A8B0C8;
+  --text-bright:#E8ECF8;
+
+  /* ── TYPOGRAPHY (confirmed: fontsinuse.com/uses/60926) ── */
+  --font-ui:      'Rajdhani', sans-serif;      /* PRIMARY — entire game UI */
+  --font-display: 'Orbitron', sans-serif;      /* SECONDARY — decorative/non-critical */
+  --font-mono:    'Share Tech Mono', monospace; /* Terminal / data streams */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  background-image:
+    linear-gradient(rgba(197,0,60,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+}
+
+/* Vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%);
+}
+
+/* ── LAYOUT ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 0 32px 80px; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5,6,8,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--red);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar-logo {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.topbar-logo span { color: var(--yellow); }
+.topbar-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.topbar-meta em { color: var(--teal); font-style: normal; }
+
+/* ── HERO ── */
+.hero {
+  padding: 64px 0 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: 0 0 40px rgba(197,0,60,0.4);
+  margin-bottom: 12px;
+  position: relative;
+}
+.hero-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  color: var(--teal);
+  clip-path: polygon(0 60%, 100% 60%, 100% 72%, 0 72%);
+  transform: translate(3px, -2px);
+  opacity: 0;
+  animation: ghost-teal 8s steps(1) infinite 2s;
+}
+@keyframes ghost-teal {
+  0%,88%,100% { opacity: 0; transform: translate(0); }
+  89%          { opacity: 0.6; transform: translate(3px,-2px); }
+  91%          { opacity: 0.4; transform: translate(-2px,1px); }
+  93%          { opacity: 0; }
+}
+.hero-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  max-width: 680px;
+  line-height: 1.7;
+}
+.hero-sub strong { color: var(--yellow); font-weight: 600; }
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-stat-val {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.15em;
+}
+.hero-stat-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── SECTION HEADERS ── */
+.section { margin-top: 56px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.section-head::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 120px;
+  height: 1px;
+  background: var(--red);
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding-top: 4px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.section-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ── SOURCE BADGE ── */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--teal);
+  border: 1px solid rgba(85,234,212,0.25);
+  padding: 3px 8px;
+  letter-spacing: 0.08em;
+  background: rgba(85,234,212,0.04);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.source-badge::before { content: '//'; color: var(--text-dim); }
+
+/* ── PANEL / CARD ── */
+.panel {
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+  padding: 20px 24px;
+  position: relative;
+}
+.panel-label {
+  position: absolute;
+  top: -1px; left: 20px;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 0.2em;
+  padding: 0 6px;
+  transform: translateY(-50%);
+  text-transform: uppercase;
+}
+.panel-accent {
+  border-color: rgba(197,0,60,0.4);
+  box-shadow: 0 0 0 1px rgba(197,0,60,0.1), inset 0 0 40px rgba(197,0,60,0.03);
+}
+.panel-teal { border-color: rgba(85,234,212,0.3); }
+.panel-yellow { border-color: rgba(243,230,0,0.3); }
+
+/* ── GRIDS ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 01 — FOUR UI STYLES
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.style-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.style-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.style-entropism::before  { background: #5A7A3A; }
+.style-kitsch::before     { background: linear-gradient(90deg, #FF69B4, #9B59B6, #3498DB); }
+.style-neomil::before     { background: var(--red); box-shadow: 0 0 12px rgba(197,0,60,0.6); }
+.style-neokitsch::before  { background: var(--gold); }
+
+.style-neomil {
+  border-color: rgba(197,0,60,0.35);
+  box-shadow: 0 0 24px rgba(197,0,60,0.08);
+}
+
+.style-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  padding: 2px 8px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.tag-default {
+  background: rgba(197,0,60,0.15);
+  border: 1px solid rgba(197,0,60,0.5);
+  color: var(--red);
+}
+.tag-ref {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.style-name {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.style-entropism .style-name  { color: #8AB060; }
+.style-kitsch .style-name     { color: #FF69B4; }
+.style-neomil .style-name     { color: var(--red); text-shadow: 0 0 12px rgba(197,0,60,0.5); }
+.style-neokitsch .style-name  { color: var(--gold); }
+
+.style-desc { font-size: 12px; color: var(--text); line-height: 1.65; margin-bottom: 12px; }
+.style-phrase {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  border-left: 2px solid currentColor;
+  padding-left: 8px;
+  margin-top: 8px;
+  font-style: italic;
+}
+.style-entropism .style-phrase  { border-color: #8AB060; color: #8AB060; }
+.style-kitsch .style-phrase     { border-color: #FF69B4; color: #FF69B4; }
+.style-neomil .style-phrase     { border-color: var(--red); color: var(--red); }
+.style-neokitsch .style-phrase  { border-color: var(--gold); color: var(--gold); }
+
+.style-colors { display: flex; gap: 4px; margin-top: 12px; }
+.swatch { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 02 — COLOR PALETTE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.color-block {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+.color-swatch {
+  height: 80px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 10px;
+}
+.color-swatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5));
+}
+.color-info { position: relative; z-index: 1; }
+.color-hex {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.05em;
+  display: block;
+}
+.color-token {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.08em;
+  display: block;
+  font-weight: 600;
+}
+.color-body {
+  background: var(--surface-2);
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-top: none;
+}
+.color-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-bright);
+  margin-bottom: 3px;
+}
+.color-role {
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.color-primary-mark {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  background: rgba(0,0,0,0.6);
+  color: var(--yellow);
+  padding: 2px 6px;
+  z-index: 2;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 03 — TYPOGRAPHY
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.font-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.font-meta {
+  background: var(--surface-2);
+  padding: 16px;
+  border-right: 1px solid var(--border);
+}
+.font-role-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.badge-primary { background: rgba(197,0,60,0.15); border: 1px solid rgba(197,0,60,0.4); color: var(--red); }
+.badge-secondary { background: rgba(243,230,0,0.1); border: 1px solid rgba(243,230,0,0.3); color: var(--yellow); }
+.badge-tertiary { background: rgba(85,234,212,0.08); border: 1px solid rgba(85,234,212,0.25); color: var(--teal); }
+
+.font-name { font-size: 13px; font-weight: 700; color: var(--text-bright); letter-spacing: 0.05em; margin-bottom: 4px; }
+.font-foundry { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; }
+.font-weights { font-size: 10px; color: var(--teal); font-family: var(--font-mono); letter-spacing: 0.06em; }
+.font-sample { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; background: var(--surface); }
+.font-sample-text { color: var(--text-bright); line-height: 1.3; }
+
+.type-scale-row {
+  display: grid;
+  grid-template-columns: 80px 60px 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.type-scale-row:last-child { border-bottom: none; }
+.scale-size { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.1em; }
+.scale-role { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); letter-spacing: 0.08em; }
+.scale-sample { color: var(--text-bright); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 04 — GEOMETRY
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.geom-demo {
+  background: var(--surface-2);
+  border: 1px solid rgba(197,0,60,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  position: relative;
+}
+.geom-chamfer-br { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%); }
+.geom-chamfer-tl { clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px); }
+.geom-chamfer-both { clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px); }
+.geom-chamfer-sm { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%); }
+.geom-hard { /* no clip-path, perfect 90° */ }
+.geom-label { font-size: 11px; color: var(--text); text-align: center; margin-top: 8px; letter-spacing: 0.06em; }
+.geom-value { font-family: var(--font-mono); font-size: 10px; color: var(--red); text-align: center; margin-top: 2px; letter-spacing: 0.08em; }
+
+/* ── Corner accent marks demo ── */
+.corner-demo {
+  width: 100%;
+  height: 80px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.corner-demo::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 10px; height: 10px;
+  border-top: 1px solid var(--red);
+  border-left: 1px solid var(--red);
+}
+.corner-demo::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; right: 6px;
+  width: 10px; height: 10px;
+  border-bottom: 1px solid var(--red);
+  border-right: 1px solid var(--red);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 05 — COMPONENTS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Buttons */
+.btn-primary {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--red);
+  border: none;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  padding: 10px 24px;
+  cursor: pointer;
+  display: inline-block;
+}
+.btn-ghost {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: transparent;
+  border: 1px solid var(--red);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  padding: 10px 24px;
+  cursor: pointer;
+  display: inline-block;
+}
+.btn-yellow {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--yellow);
+  border: none;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  padding: 10px 24px;
+  cursor: pointer;
+  display: inline-block;
+}
+.btn-teal {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: transparent;
+  border: 1px solid rgba(85,234,212,0.4);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  padding: 9px 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 0;
+}
+.tag-red  { color: var(--red);    border: 1px solid rgba(197,0,60,0.4);  background: rgba(197,0,60,0.08);  }
+.tag-teal { color: var(--teal);   border: 1px solid rgba(85,234,212,0.35); background: rgba(85,234,212,0.06); }
+.tag-yel  { color: var(--yellow); border: 1px solid rgba(243,230,0,0.35); background: rgba(243,230,0,0.06);  }
+.tag-gold { color: var(--gold);   border: 1px solid rgba(216,188,102,0.3);background: rgba(216,188,102,0.05);}
+.tag-dim  { color: var(--muted);  border: 1px solid var(--border);        background: rgba(255,255,255,0.02);}
+
+/* HUD Stat */
+.stat-card {
+  border: 1px solid rgba(197,0,60,0.35);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+  padding: 14px 16px;
+  background: rgba(197,0,60,0.04);
+  position: relative;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--red), transparent);
+}
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--red);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(197,0,60,0.5);
+}
+.stat-lbl {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Progress bars */
+.bar-track {
+  height: 3px;
+  background: rgba(197,0,60,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--red);
+  box-shadow: 0 0 6px rgba(197,0,60,0.8);
+  position: relative;
+}
+
+/* Segmented bar */
+.seg-bar { display: flex; gap: 2px; }
+.seg { height: 4px; flex: 1; background: var(--red); box-shadow: 0 0 4px rgba(197,0,60,0.6); }
+.seg.empty { background: rgba(197,0,60,0.15); box-shadow: none; }
+
+/* Nav sample */
+.nav-sample {
+  background: rgba(0,0,0,0.85);
+  border-bottom: 1px solid var(--red);
+  padding: 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo { font-family: var(--font-display); font-size: 11px; font-weight: 900; color: var(--red); letter-spacing: 0.2em; }
+.nav-links { display: flex; gap: 24px; }
+.nav-link {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.nav-link.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* Timeline */
+.timeline-item { display: grid; grid-template-columns: 90px 18px 1fr; gap: 0; align-items: start; }
+.tl-date { font-family: var(--font-mono); font-size: 10px; color: var(--yellow); letter-spacing: 0.08em; padding-top: 12px; text-align: right; padding-right: 12px; }
+.tl-spine { display: flex; flex-direction: column; align-items: center; }
+.tl-dot { width: 8px; height: 8px; border: 2px solid var(--red); background: var(--black); box-shadow: 0 0 6px rgba(197,0,60,0.6); flex-shrink: 0; margin-top: 12px; }
+.tl-line { width: 1px; flex: 1; background: linear-gradient(to bottom, rgba(197,0,60,0.4), rgba(197,0,60,0.05)); min-height: 60px; }
+.tl-content {
+  margin-left: 12px;
+  border: 1px solid var(--border-2);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  padding: 12px 14px;
+  background: var(--surface-2);
+  margin-bottom: 8px;
+}
+.tl-company { font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 0.06em; margin-bottom: 3px; }
+.tl-role { font-size: 11px; color: var(--teal); letter-spacing: 0.08em; margin-bottom: 6px; }
+.tl-bullet { font-size: 11px; color: var(--text); }
+
+/* Terminal input */
+.terminal-wrap {
+  background: rgba(0,0,0,0.8);
+  border: 1px solid rgba(85,234,212,0.25);
+  padding: 16px;
+  font-family: var(--font-mono);
+}
+.terminal-prompt { color: var(--teal); font-size: 12px; margin-bottom: 12px; line-height: 1.8; }
+.terminal-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(85,234,212,0.2);
+  padding: 6px 0;
+  margin-bottom: 8px;
+}
+.terminal-prefix { color: var(--teal); font-size: 13px; flex-shrink: 0; }
+.terminal-text { font-size: 13px; color: var(--text); }
+.terminal-cursor { display: inline-block; width: 8px; height: 14px; background: var(--teal); opacity: 0.8; animation: blink 1s step-end infinite; vertical-align: middle; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 06 — GLOW SYSTEM
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.glow-demo {
+  padding: 16px 20px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+  border: 1px solid;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.glow-red-demo   { border-color: var(--red);    color: var(--red);    box-shadow: 0 0 0 1px var(--red), 0 0 16px rgba(197,0,60,0.5), inset 0 0 20px rgba(197,0,60,0.04); text-shadow: 0 0 12px rgba(197,0,60,0.9); }
+.glow-yellow-demo{ border-color: var(--yellow);  color: var(--yellow); box-shadow: 0 0 0 1px var(--yellow), 0 0 16px rgba(243,230,0,0.4), inset 0 0 20px rgba(243,230,0,0.03); text-shadow: 0 0 12px rgba(243,230,0,0.8); }
+.glow-teal-demo  { border-color: var(--teal);    color: var(--teal);   box-shadow: 0 0 0 1px var(--teal), 0 0 16px rgba(85,234,212,0.4), inset 0 0 20px rgba(85,234,212,0.04); text-shadow: 0 0 12px rgba(85,234,212,0.8); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 07 — BACKGROUNDS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.bg-demo { height: 80px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+.bg-label {
+  position: absolute;
+  bottom: 6px; right: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 08 — ANIMATION KEYFRAMES CODE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+pre, code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  color: var(--teal);
+  border-left: 2px solid var(--red);
+  padding: 14px 16px;
+  overflow-x: auto;
+  line-height: 1.7;
+  white-space: pre;
+}
+code .kw  { color: var(--red); }
+code .val { color: var(--yellow); }
+code .str { color: var(--teal); }
+code .cmt { color: var(--text-dim); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION 09 — FULL-SCREEN PANELS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.panel-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.panel-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(197,0,60,0.1);
+  border: 1px solid rgba(197,0,60,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.panel-info-name { font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 0.06em; margin-bottom: 4px; }
+.panel-info-desc { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TAILWIND TOKEN TABLE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+th {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+td {
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tr:hover td { background: rgba(197,0,60,0.03); }
+.td-token { font-family: var(--font-mono); color: var(--teal); font-size: 10px; }
+.td-hex { font-family: var(--font-mono); color: var(--text-bright); font-size: 10px; }
+.td-role { color: var(--text-dim); font-size: 11px; }
+.td-dot { display: inline-block; width: 10px; height: 10px; border: 1px solid rgba(255,255,255,0.1); margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--red), rgba(197,0,60,0.1), transparent);
+  margin: 48px 0 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+}
+.footer-credits { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); line-height: 2; }
+.footer-credits strong { color: var(--red); font-style: normal; }
+
+/* ── QUOTE BLOCK ── */
+.quote-block {
+  border-left: 3px solid var(--red);
+  padding: 12px 16px;
+  margin: 16px 0;
+  background: rgba(197,0,60,0.04);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.quote-block cite {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+}
+
+/* ── RULE GRID ── */
+.rule-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  align-items: start;
+}
+.rule-key { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.08em; padding-right: 16px; padding-top: 2px; }
+.rule-val { font-size: 12px; color: var(--text); line-height: 1.6; }
+.rule-val strong { color: var(--text-bright); font-weight: 600; }
+.rule-val code.inline {
+  display: inline;
+  background: rgba(197,0,60,0.1);
+  border: none;
+  border-left: none;
+  color: var(--yellow);
+  padding: 1px 5px;
+  font-size: 10px;
+}
+
+/* Small utility */
+.mt-4  { margin-top: 4px; }
+.mt-8  { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; }
+.flex { display: flex; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.col { flex-direction: column; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">CP<span>//</span>2077 &nbsp; UI DESIGN BIBLE</div>
+  <div class="topbar-meta">SOURCE: <em>VLADIMÍR VILIMOVSKÝ</em> · SENIOR UI ARTIST · CD PROJEKT RED · 2018—PRESENT</div>
+</div>
+
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">// SCRAPED FROM OFFICIAL DESIGNER PORTFOLIO — BEHANCE + GAME DAYS 2022 TALK</div>
+  <h1 class="hero-title" data-text="CYBERPUNK 2077 USER INTERFACE">CYBERPUNK 2077 USER INTERFACE</h1>
+  <p class="hero-sub">
+    Complete design system extracted from <strong>Vladimír Vilimovský's</strong> official portfolio — both Behance parts — and cross-referenced with the Game Days 2022 talk "The Art of UI." All four official Night City UI styles documented. <strong>Neo Militarism</strong> is the default player UI and HUD. This document is the ground truth for implementation.
+  </p>
+  <div class="hero-meta">
+    <div class="hero-stat"><span class="hero-stat-val">VLADIMÍR VILIMOVSKÝ</span><span class="hero-stat-label">Senior UI Artist / CDPR</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">2018 → PRESENT</span><span class="hero-stat-label">Engagement period</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">NEO MILITARISM</span><span class="hero-stat-label">Default player UI style</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">RAJDHANI</span><span class="hero-stat-label">Primary UI font (all game UI)</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">#C5003C</span><span class="hero-stat-label">Primary accent — deliberate RED</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 01 — THE FOUR UI STYLES (ART BIBLE)
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 01</span>
+    <div>
+      <div class="section-title">THE FOUR OFFICIAL UI STYLES</div>
+      <div class="section-desc">From the UI Art Bible (Part 1 — behance.net/gallery/118663901). Each style maps to a Night City societal era. Only Neo Militarism applies to the resume site.</div>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "This is the initial form of the User Interface Art Bible, the base of an aesthetical guide through the historical and technological eras of Cyberpunk 2077. Design and civilization have danced hand-in-hand since time immemorial. Whatever the human activity, design has never failed to react."
+    <cite>— VLADIMÍR VILIMOVSKÝ, UI Art Bible Foreword (Part 1)</cite>
+  </div>
+
+  <div class="grid-4 mt-16">
+
+    <div class="style-card style-entropism">
+      <div class="style-tag tag-ref">STYLE 01</div>
+      <div class="style-name">ENTROPISM</div>
+      <p class="style-desc">Functional poverty. CRT terminal aesthetic, worn surfaces. Born from scarcity — minimal resources expressed through minimal design. Phosphor-green data readouts, industrial grime.</p>
+      <div class="style-phrase">// Survival over style</div>
+      <div class="style-colors mt-8">
+        <div class="swatch" style="background:#3D5A20;" title="#3D5A20"></div>
+        <div class="swatch" style="background:#8AB060;" title="#8AB060"></div>
+        <div class="swatch" style="background:#C8A060;" title="#C8A060"></div>
+        <div class="swatch" style="background:#58482C;" title="#58482C"></div>
+        <div class="swatch" style="background:#1A1A12;" title="#1A1A12"></div>
+      </div>
+      <div class="mt-8" style="font-size:10px;color:var(--text-dim);">Use in: slum screens, scav gear, lower-city terminals</div>
+    </div>
+
+    <div class="style-card style-kitsch">
+      <div class="style-tag tag-ref">STYLE 02</div>
+      <div class="style-name">KITSCH</div>
+      <p class="style-desc">Commercial excess. Maximum brightness, maximum noise. Neon signage and advertising saturation. Over-the-top visual overload — every surface screaming for attention.</p>
+      <div class="style-phrase">// Louder. More. Always more.</div>
+      <div class="style-colors mt-8">
+        <div class="swatch" style="background:#FF69B4;" title="#FF69B4"></div>
+        <div class="swatch" style="background:#9B59B6;" title="#9B59B6"></div>
+        <div class="swatch" style="background:#3498DB;" title="#3498DB"></div>
+        <div class="swatch" style="background:#FF6B35;" title="#FF6B35"></div>
+        <div class="swatch" style="background:#F0E040;" title="#F0E040"></div>
+      </div>
+      <div class="mt-8" style="font-size:10px;color:var(--text-dim);">Use in: street ads, braindance clubs, fast-food kiosks</div>
+    </div>
+
+    <div class="style-card style-neomil">
+      <div class="style-tag tag-default">STYLE 03 — DEFAULT PLAYER UI</div>
+      <div class="style-name">NEO MILITARISM</div>
+      <p class="style-desc">Cold, threatening elegance. Corporate precision with militaristic formality. "Substance over style." Forceful, functional, high-quality — never flashy. <strong style="color:var(--red)">RED is the primary color</strong> — a deliberate non-conformist decision against all UI conventions. Encountered in wealthy corporate zones and business districts.</p>
+      <div class="style-phrase">// Substance over style.</div>
+      <div class="style-colors mt-8">
+        <div class="swatch" style="background:#C5003C;" title="#C5003C PRIMARY"></div>
+        <div class="swatch" style="background:#880425;" title="#880425"></div>
+        <div class="swatch" style="background:#F3E600;" title="#F3E600 SECONDARY"></div>
+        <div class="swatch" style="background:#55EAD4;" title="#55EAD4 TERTIARY"></div>
+        <div class="swatch" style="background:#000000;border:1px solid #333;" title="#000000"></div>
+      </div>
+      <div class="mt-8" style="font-size:10px;color:var(--text-dim);">⚠ IMPLEMENT THIS STYLE. All other styles are reference only.</div>
+    </div>
+
+    <div class="style-card style-neokitsch">
+      <div class="style-tag tag-ref">STYLE 04</div>
+      <div class="style-name">NEO KITSCH</div>
+      <p class="style-desc">Premium commercial luxury. Gold accents, high-end advertising aesthetic. Status signaling through material quality. Refined excess — not cheap neon but opulent gold. Corporate elite.</p>
+      <div class="style-phrase">// Luxury as language.</div>
+      <div class="style-colors mt-8">
+        <div class="swatch" style="background:#D8BC66;" title="#D8BC66"></div>
+        <div class="swatch" style="background:#B89A40;" title="#B89A40"></div>
+        <div class="swatch" style="background:#1A1208;" title="#1A1208"></div>
+        <div class="swatch" style="background:#F0E0C0;" title="#F0E0C0"></div>
+        <div class="swatch" style="background:#8B7340;" title="#8B7340"></div>
+      </div>
+      <div class="mt-8" style="font-size:10px;color:var(--text-dim);">Use in: corpo elite panels, high-end vendor interfaces</div>
+    </div>
+
+  </div>
+
+  <!-- Key Vilimovský quote on RED -->
+  <div class="quote-block mt-16">
+    "The biggest struggle was with the efforts to create the military system, with the hostile nature and with a degree of aggression expressed and rendered in RED colour. It was a bold decision and a walk against the stream of all the conventions and design habits. Just because the colour RED is a default it is inevitably causing a discrepancy with its general use, communicating malfunctioning, warnings, low battery, danger, etc. The aesthetical direction was based on UI Art Bible and we kept on it — we were iterating and exploring ways around to make our UI comfortable to use and to navigate through, yet having the non-conformist attitude. That was our goal with UI for Cyberpunk 2077. Note: There were a few side steps with different colour experiments, but it never really felt right."
+    <cite>— VLADIMÍR VILIMOVSKÝ, Part 2 Introduction (behance.net/gallery/133185623)</cite>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 02 — OFFICIAL COLOR PALETTE
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 02</span>
+    <div>
+      <div class="section-title">NEO MILITARISM COLOR SYSTEM</div>
+      <div class="section-desc">Confirmed palette: color-hex.com/color-palette/1041326 + ColorsWall Art Bible extractions + Vilimovský's stated design intent.</div>
+    </div>
+  </div>
+
+  <!-- Primary colors -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-mono)">// PRIMARY PALETTE — CONFIRMED</div>
+  <div class="grid-5">
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#C5003C;">
+        <span class="color-primary-mark">★ PRIMARY</span>
+        <div class="color-info">
+          <span class="color-hex">#C5003C</span>
+          <span class="color-token">--red</span>
+        </div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">NEO-MIL RED</div>
+        <div class="color-role">Player HUD primary. Active states, borders, headings. The defining color of Neo Militarism.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#880425;">
+        <div class="color-info">
+          <span class="color-hex">#880425</span>
+          <span class="color-token">--red-dark</span>
+        </div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">DEEP RED</div>
+        <div class="color-role">Pressed states. Fill for active panels. Shadow layer on primary red elements.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#F3E600;">
+        <div class="color-info">
+          <span class="color-hex">#F3E600</span>
+          <span class="color-token">--yellow</span>
+        </div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">COMBAT YELLOW</div>
+        <div class="color-role">Secondary accent. Warnings, highlights, secondary CTAs. Also used as branding on game marketing.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#55EAD4;">
+        <div class="color-info">
+          <span class="color-hex">#55EAD4</span>
+          <span class="color-token">--teal</span>
+        </div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">NET TEAL</div>
+        <div class="color-role">Tertiary. Hacker / NET contexts only. Terminal inputs, data stream visualizations, hacking minigame.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#000000;border:1px solid #222;">
+        <div class="color-info">
+          <span class="color-hex">#000000</span>
+          <span class="color-token">--black</span>
+        </div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">VOID BLACK</div>
+        <div class="color-role">Absolute background. No gradients on page background. Pure black only.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Extended -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;margin:20px 0 8px;font-family:var(--font-mono)">// EXTENDED PALETTE — FROM ART BIBLE (ColorsWall / CDPR Design Bible)</div>
+  <div class="grid-5">
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#FF003C;">
+        <div class="color-info"><span class="color-hex">#FF003C</span><span class="color-token">--red-glow</span></div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">NEON BLOOM</div>
+        <div class="color-role">box-shadow glow layer only. Never as fill color. Always at reduced opacity.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#FCEC0C;">
+        <div class="color-info"><span class="color-hex">#FCEC0C</span><span class="color-token">--yellow-alt</span></div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">BRIGHT YELLOW</div>
+        <div class="color-role">Brighter yellow variant from Art Bible. Use for highest-priority highlight states.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#D8BC66;">
+        <div class="color-info"><span class="color-hex">#D8BC66</span><span class="color-token">--gold</span></div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">NEO KITSCH GOLD</div>
+        <div class="color-role">High-tier item indicators. Legendary rarity level. Featured project badges.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#136377;">
+        <div class="color-info"><span class="color-hex">#136377</span><span class="color-token">--teal-dark</span></div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">DEEP TEAL</div>
+        <div class="color-role">Dark teal for secondary data panels in hacker context.</div>
+      </div>
+    </div>
+
+    <div class="color-block">
+      <div class="color-swatch" style="background:#D1C5C0;">
+        <div class="color-info"><span class="color-hex">#D1C5C0</span><span class="color-token">--warm-gray</span></div>
+      </div>
+      <div class="color-body">
+        <div class="color-name">WARM GRAY</div>
+        <div class="color-role">Body text. Descriptive copy. Secondary UI labels not warranting accent color.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Surface system -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;margin:20px 0 8px;font-family:var(--font-mono)">// SURFACE HIERARCHY</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Token</th><th>Hex</th><th>Sample</th><th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="td-token">--black</td><td class="td-hex">#000000</td><td><span class="td-dot" style="background:#000000;border:1px solid #333;"></span></td><td class="td-role">Page background — absolute black, no exceptions</td></tr>
+      <tr><td class="td-token">--surface</td><td class="td-hex">#0D0D0D</td><td><span class="td-dot" style="background:#0D0D0D;"></span></td><td class="td-role">Base panel background — dark but not pure black</td></tr>
+      <tr><td class="td-token">--surface-2</td><td class="td-hex">#111318</td><td><span class="td-dot" style="background:#111318;"></span></td><td class="td-role">Elevated surface — cards, popovers, overlays</td></tr>
+      <tr><td class="td-token">--surface-3</td><td class="td-hex">#161820</td><td><span class="td-dot" style="background:#161820;"></span></td><td class="td-role">Highest elevation — tooltips, active panel states</td></tr>
+      <tr><td class="td-token">--border</td><td class="td-hex">#1C2030</td><td><span class="td-dot" style="background:#1C2030;"></span></td><td class="td-role">Default inactive border</td></tr>
+      <tr><td class="td-token">--muted</td><td class="td-hex">#3A4060</td><td><span class="td-dot" style="background:#3A4060;"></span></td><td class="td-role">Muted / disabled element text</td></tr>
+    </tbody>
+  </table>
+
+  <!-- CRITICAL COLOR RULE -->
+  <div class="panel panel-accent mt-16" style="padding:14px 18px;">
+    <div class="panel-label">CRITICAL DESIGN RULE</div>
+    <div style="font-size:13px;color:var(--text-bright);line-height:1.7;font-weight:600;margin-top:4px;">
+      RED (#C5003C) IS THE DEFAULT PRIMARY COLOR — NOT AN ERROR STATE.
+    </div>
+    <div style="font-size:12px;color:var(--text);margin-top:6px;line-height:1.6;">
+      In Neo Militarism, red communicates active selection, primary hierarchy, and player identity. Do <strong style="color:var(--red)">NOT</strong> remap red exclusively to errors or danger. Use <strong style="color:var(--yellow)">--yellow (#F3E600)</strong> for actual warnings. Use <strong style="color:var(--teal)">--teal (#55EAD4)</strong> for hacking/success states. The non-conformist use of red as primary is the <em>defining signature</em> of this UI system.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 03 — TYPOGRAPHY
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 03</span>
+    <div>
+      <div class="section-title">TYPOGRAPHY SYSTEM</div>
+      <div class="section-desc">Confirmed source: fontsinuse.com/uses/60926 — "Most the entire in-game user interface is set in Rajdhani." Orbitron confirmed as secondary. Part 2 explicitly documents font selection rationale.</div>
+    </div>
+  </div>
+
+  <!-- Font rows -->
+  <div class="font-row">
+    <div class="font-meta">
+      <span class="font-role-badge badge-primary">PRIMARY — ALL UI</span>
+      <div class="font-name">Rajdhani</div>
+      <div class="font-foundry">Indian Type Foundry (ITF)</div>
+      <div class="font-weights">wght: 400 500 600 700</div>
+    </div>
+    <div class="font-sample">
+      <div class="font-sample-text" style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:0.08em;color:var(--red);">NIGHT CITY DEVELOPER</div>
+      <div class="font-sample-text" style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:400;letter-spacing:0.05em;color:var(--text);margin-top:6px;">Full Stack Engineer — Java 21 · Spring Boot · Next.js · MongoDB</div>
+      <div class="font-sample-text" style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.18em;color:var(--text-dim);margin-top:4px;text-transform:uppercase;">UI LABELS · NAVIGATION · BODY COPY · DATA READOUTS · TAGS</div>
+    </div>
+  </div>
+
+  <div class="font-row mt-8">
+    <div class="font-meta">
+      <span class="font-role-badge badge-secondary">SECONDARY — DISPLAY</span>
+      <div class="font-name">Orbitron</div>
+      <div class="font-foundry">Matt McInerney</div>
+      <div class="font-weights">wght: 400 600 700 900</div>
+    </div>
+    <div class="font-sample">
+      <div class="font-sample-text" style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:0.15em;color:var(--text-bright);">SECTION_HEADING.EXE</div>
+      <div class="font-sample-text" style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:400;letter-spacing:0.2em;color:var(--text-dim);margin-top:6px;text-transform:uppercase;">STAT VALUES · LOGO · HERO NAME ONLY</div>
+      <div class="font-sample-text" style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.06em;">⚠ Used sparingly. Never below 14px. Never for body copy or labels.</div>
+    </div>
+  </div>
+
+  <div class="font-row mt-8">
+    <div class="font-meta">
+      <span class="font-role-badge badge-tertiary">TERTIARY — TERMINAL</span>
+      <div class="font-name">Share Tech Mono</div>
+      <div class="font-foundry">Carrois Type Design</div>
+      <div class="font-weights">wght: 400 only</div>
+    </div>
+    <div class="font-sample">
+      <div class="font-sample-text" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--teal);">&gt; ESTABLISHING SECURE CHANNEL...<br>&gt; CONNECTION ESTABLISHED ✓<br>&gt; ENTER TRANSMISSION DATA:</div>
+      <div class="font-sample-text" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin-top:6px;">// terminal · data streams · code annotations · hacking interface</div>
+    </div>
+  </div>
+
+  <!-- Web-only note -->
+  <div class="panel panel-teal mt-12" style="padding:12px 16px;">
+    <div class="panel-label">WEB NOTE</div>
+    <div style="font-size:11px;color:var(--teal);margin-top:4px;line-height:1.6;font-family:var(--font-mono);">
+      Blender (headlines) + Refinery (website) are licensed paid fonts used on CDPR's official marketing sites. These are NOT available on Google Fonts. Do not attempt to source them. Rajdhani + Orbitron are the correct free alternatives confirmed for in-game UI and recommended for web implementation.
+    </div>
+  </div>
+
+  <!-- Type scale -->
+  <div class="mt-24" style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// RECOMMENDED TYPE SCALE</div>
+  <div class="panel" style="padding:0 24px;">
+    <div class="type-scale-row" style="border-bottom:1px solid var(--border);padding:12px 0 8px;">
+      <span class="scale-size" style="color:var(--text-dim);">SIZE</span>
+      <span class="scale-role" style="color:var(--text-dim);">ROLE</span>
+      <span class="scale-sample" style="color:var(--text-dim);font-size:10px;font-family:var(--font-mono);">SAMPLE</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">72px / 900</span>
+      <span class="scale-role">Hero name</span>
+      <span class="scale-sample" style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--red);letter-spacing:0.15em;">FIRSTNAME</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">40px / 700</span>
+      <span class="scale-role">Hero tagline</span>
+      <span class="scale-sample" style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.12em;color:var(--text-bright);">NIGHT CITY DEV</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">28px / 700</span>
+      <span class="scale-role">Section heading</span>
+      <span class="scale-sample" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.08em;color:var(--red);">EXPERIENCE.LOG</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">20px / 600</span>
+      <span class="scale-role">Card title</span>
+      <span class="scale-sample" style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;letter-spacing:0.06em;color:var(--text-bright);">Senior Engineer — CDPR</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">16px / 400</span>
+      <span class="scale-role">Body copy</span>
+      <span class="scale-sample" style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:400;letter-spacing:0.04em;color:var(--text);">Description text from project.description or experience.highlights[]</span>
+    </div>
+    <div class="type-scale-row">
+      <span class="scale-size">13px / 600</span>
+      <span class="scale-role">UI label</span>
+      <span class="scale-sample" style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);">SECTION IDENTIFIER · NAV LINK · BUTTON TEXT</span>
+    </div>
+    <div class="type-scale-row" style="border-bottom:none;">
+      <span class="scale-size">10px / 600</span>
+      <span class="scale-role">Micro label</span>
+      <span class="scale-sample" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--red);letter-spacing:0.15em;">// PANEL_LABEL · VERSION_STRING · STATUS_TAG</span>
+    </div>
+  </div>
+
+  <!-- Letter spacing rules -->
+  <div class="mt-16">
+    <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-mono)">// LETTER SPACING — MANDATORY (Rajdhani reads flat without tracking)</div>
+    <div class="grid-4">
+      <div class="panel" style="text-align:center;padding:14px;">
+        <div style="font-size:22px;font-family:'Rajdhani',sans-serif;font-weight:400;letter-spacing:0.02em;color:var(--text);">BODY</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--red);margin-top:6px;">0.02–0.05em</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Body copy</div>
+      </div>
+      <div class="panel" style="text-align:center;padding:14px;">
+        <div style="font-size:18px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:0.1em;color:var(--text);text-transform:uppercase;">LABEL</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--red);margin-top:6px;">0.08–0.12em</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Nav / UI labels</div>
+      </div>
+      <div class="panel" style="text-align:center;padding:14px;">
+        <div style="font-size:14px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:0.18em;color:var(--text-bright);text-transform:uppercase;">HEADING</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--red);margin-top:6px;">0.15–0.2em</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Orbitron sections</div>
+      </div>
+      <div class="panel" style="text-align:center;padding:14px;">
+        <div style="font-size:20px;font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:0.25em;color:var(--red);text-transform:uppercase;">HERO</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--red);margin-top:6px;">0.2–0.3em</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Hero name</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 04 — SHAPE LANGUAGE & GEOMETRY
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 04</span>
+    <div>
+      <div class="section-title">SHAPE LANGUAGE — GEOMETRY RULES</div>
+      <div class="section-desc">Zero rounded corners. Angular geometry exclusively. All chamfers are 45° cuts via clip-path. Confirmed by visual analysis of Vilimovský's panels in both portfolio parts.</div>
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div>
+      <div class="geom-demo geom-chamfer-br" style="border-color:rgba(197,0,60,0.4);">STANDARD</div>
+      <div class="geom-label">Bottom-Right Chamfer</div>
+      <div class="geom-value">16px cut — panels, cards</div>
+    </div>
+    <div>
+      <div class="geom-demo geom-chamfer-tl" style="border-color:rgba(197,0,60,0.4);">TOP-LEFT</div>
+      <div class="geom-label">Top-Left Chamfer</div>
+      <div class="geom-value">16px cut — directional emphasis</div>
+    </div>
+    <div>
+      <div class="geom-demo geom-chamfer-both" style="border-color:rgba(197,0,60,0.4);">FEATURED</div>
+      <div class="geom-label">Double Chamfer</div>
+      <div class="geom-value">Both diagonal cuts — hero panels</div>
+    </div>
+    <div>
+      <div class="geom-demo geom-chamfer-sm" style="border-color:rgba(197,0,60,0.4);">BTN</div>
+      <div class="geom-label">Button Chamfer</div>
+      <div class="geom-value">8px cut — buttons, chips, tags</div>
+    </div>
+  </div>
+
+  <div class="grid-4 mt-16">
+    <div>
+      <div class="corner-demo"></div>
+      <div class="geom-label">Corner Accent Marks</div>
+      <div class="geom-value">L-bracket decoration on panel corners</div>
+    </div>
+    <div>
+      <div class="geom-demo geom-hard" style="border-left:3px solid var(--red);border-color:var(--border);">LEFT STRIPE</div>
+      <div class="geom-label">Left Accent Stripe</div>
+      <div class="geom-value">3px border-left — list items, cards</div>
+    </div>
+    <div>
+      <div style="height:80px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--red),rgba(197,0,60,0.1),transparent);"></div>
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">TOP GRADIENT LINE</div>
+      </div>
+      <div class="geom-label">Top Gradient Line</div>
+      <div class="geom-value">Panels & section headers</div>
+    </div>
+    <div>
+      <div style="height:80px;border:1px solid var(--border);background:repeating-linear-gradient(transparent,transparent 2px,rgba(197,0,60,0.02) 2px,rgba(197,0,60,0.02) 4px);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">SCANLINES</span>
+      </div>
+      <div class="geom-label">Scanline Texture</div>
+      <div class="geom-value">Fixed overlay — entire viewport</div>
+    </div>
+  </div>
+
+  <!-- Clip-path CSS -->
+  <div class="mt-16" style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-mono)">// CLIP-PATH CSS (copy-paste ready)</div>
+  <pre><code><span class="cmt">/* Standard panel — bottom-right 16px chamfer */</span>
+<span class="kw">.cp-panel</span> { clip-path: polygon(0 0, 100% 0, 100% calc(100% - <span class="val">16px</span>), calc(100% - <span class="val">16px</span>) 100%, 0 100%); }
+
+<span class="cmt">/* Featured / hero — TL + BR double chamfer */</span>
+<span class="kw">.cp-featured</span> { clip-path: polygon(<span class="val">16px</span> 0, 100% 0, 100% calc(100% - <span class="val">16px</span>), calc(100% - <span class="val">16px</span>) 100%, 0 100%, 0 <span class="val">16px</span>); }
+
+<span class="cmt">/* Button / small element — 8px chamfer */</span>
+<span class="kw">.cp-btn</span> { clip-path: polygon(0 0, 100% 0, 100% calc(100% - <span class="val">8px</span>), calc(100% - <span class="val">8px</span>) 100%, 0 100%); }
+
+<span class="cmt">/* NEVER use border-radius on any UI element. border-radius: 0 always. */</span>
+<span class="cmt">/* Exception: circular avatar images only */</span></code></pre>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 05 — LIVE COMPONENT LIBRARY
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 05</span>
+    <div>
+      <div class="section-title">COMPONENT LIBRARY — RENDERED</div>
+      <div class="section-desc">All components rendered live in the official Neo Militarism aesthetic. These demonstrate exact implementation of the design rules.</div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// BUTTONS</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px;">
+    <span class="btn-primary">Primary Action</span>
+    <span class="btn-ghost">Ghost / Outline</span>
+    <span class="btn-yellow">Secondary CTA</span>
+    <span class="btn-teal">NET Context</span>
+  </div>
+
+  <!-- Tags -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// TAGS & CHIPS</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+    <span class="tag tag-red">Java 21</span>
+    <span class="tag tag-teal">Spring Boot</span>
+    <span class="tag tag-yel">Next.js</span>
+    <span class="tag tag-gold">MongoDB</span>
+    <span class="tag tag-dim">Docker</span>
+    <span class="tag tag-teal">Featured</span>
+    <span class="tag tag-red">Full Stack</span>
+  </div>
+
+  <!-- HUD Stats -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// HUD STAT PANELS (hero section)</div>
+  <div class="grid-4" style="margin-bottom:24px;">
+    <div class="stat-card"><div class="stat-val">5+</div><div class="stat-lbl">Years Exp</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--yellow);text-shadow:0 0 20px rgba(243,230,0,0.5);">20+</div><div class="stat-lbl">Projects</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--teal);text-shadow:0 0 20px rgba(85,234,212,0.5);">15+</div><div class="stat-lbl">Technologies</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--gold);text-shadow:0 0 20px rgba(216,188,102,0.5);">∞</div><div class="stat-lbl">Commits</div></div>
+  </div>
+
+  <!-- Progress bars -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// SKILL BARS — THREE VARIANTS</div>
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="panel" style="padding:16px;">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--teal);margin-bottom:12px;letter-spacing:0.1em;">CONTINUOUS BAR</div>
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;color:var(--text);letter-spacing:0.06em;font-weight:600;">JAVA 21 / SPRING BOOT</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--red);">92%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;color:var(--text);letter-spacing:0.06em;font-weight:600;">NEXT.JS / REACT</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--yellow);">85%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--yellow);box-shadow:0 0 6px rgba(243,230,0,0.7);"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;color:var(--text);letter-spacing:0.06em;font-weight:600;">MONGODB / ATLAS</span><span style="font-family:var(--font-mono);font-size:10px;color:var(--teal);">78%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--teal);box-shadow:0 0 6px rgba(85,234,212,0.7);"></div></div>
+      </div>
+    </div>
+    <div class="panel" style="padding:16px;">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--teal);margin-bottom:12px;letter-spacing:0.1em;">SEGMENTED BAR (HUD-style — ammo/health)</div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;color:var(--text);letter-spacing:0.06em;font-weight:600;margin-bottom:6px;">HEALTH</div>
+        <div class="seg-bar"><?php for($i=0;$i<20;$i++) echo '<div class="seg'.(rand(0,4)===0?' empty':'').'"></div>'; ?></div>
+        <div class="seg-bar mt-4" style="margin-top:4px;">
+          <div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div>
+        </div>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:4px;font-family:var(--font-mono);">// 13/20 — yellow threshold at 30%, red flash at 10%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// NAVBAR</div>
+  <div class="nav-sample" style="margin-bottom:24px;">
+    <div class="nav-logo">V.NAME // NIGHT CITY</div>
+    <div class="nav-links">
+      <span class="nav-link active">HOME</span>
+      <span class="nav-link">EXPERIENCE</span>
+      <span class="nav-link">PROJECTS</span>
+      <span class="nav-link">SKILLS</span>
+      <span class="nav-link">CONTACT</span>
+    </div>
+    <span class="btn-ghost" style="font-size:11px;padding:6px 16px;">↓ CV.PDF</span>
+  </div>
+
+  <!-- Experience timeline -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// EXPERIENCE TIMELINE</div>
+  <div style="margin-bottom:24px;">
+    <div class="timeline-item">
+      <div class="tl-date">2022—NOW</div>
+      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-company">SENIOR ENGINEER // COMPANY NAME</div>
+        <div class="tl-role">Full-time · Night City, NC</div>
+        <div class="tl-bullet">▸ Lead architecture for microservice platform serving 2M users</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-date">2020—2022</div>
+      <div class="tl-spine"><div class="tl-dot" style="border-color:var(--teal);box-shadow:0 0 6px rgba(85,234,212,0.4);"></div><div class="tl-line" style="background:linear-gradient(to bottom,rgba(85,234,212,0.3),rgba(85,234,212,0.05));"></div></div>
+      <div class="tl-content">
+        <div class="tl-company">MID ENGINEER // PREV COMPANY</div>
+        <div class="tl-role">Full-time · Remote</div>
+        <div class="tl-bullet">▸ Built Spring Boot REST APIs · Implemented MongoDB data layer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminal form -->
+  <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font-mono)">// CONTACT TERMINAL FORM</div>
+  <div class="terminal-wrap" style="max-width:480px;margin-bottom:24px;">
+    <div class="terminal-prompt">&gt; ESTABLISHING SECURE CHANNEL...<br>&gt; CONNECTION ESTABLISHED ✓<br>&gt; ENTER TRANSMISSION DATA:</div>
+    <div class="terminal-field"><span class="terminal-prefix">&gt;</span><span class="terminal-text">FIRSTNAME LASTNAME<span class="terminal-cursor"></span></span></div>
+    <div class="terminal-field"><span class="terminal-prefix">&gt;</span><span class="terminal-text" style="color:var(--muted);">your@email.com</span></div>
+    <div class="terminal-field"><span class="terminal-prefix">&gt;</span><span class="terminal-text" style="color:var(--muted);">Subject line...</span></div>
+    <div style="margin-top:12px;"><span class="btn-yellow" style="font-size:12px;padding:8px 20px;">▶ TRANSMIT MESSAGE</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 06 — NEON GLOW SYSTEM
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 06</span>
+    <div>
+      <div class="section-title">NEON GLOW SYSTEM</div>
+      <div class="section-desc">Implemented via box-shadow + text-shadow. Use sparingly — only on primary interactive elements and featured content. Never stack multiple glows.</div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div>
+      <div class="glow-demo glow-red-demo">RED GLOW STATE</div>
+      <pre style="margin-top:8px;font-size:9px;"><code style="font-size:9px;">box-shadow:
+  0 0 0 1px <span class="val">#C5003C</span>,
+  0 0 16px rgba(<span class="val">197,0,60,0.5</span>),
+  inset 0 0 20px rgba(<span class="val">197,0,60,0.04</span>);
+text-shadow:
+  0 0 12px rgba(<span class="val">197,0,60,0.9</span>);</code></pre>
+    </div>
+    <div>
+      <div class="glow-demo glow-yellow-demo">YELLOW GLOW</div>
+      <pre style="margin-top:8px;font-size:9px;"><code style="font-size:9px;">box-shadow:
+  0 0 0 1px <span class="val">#F3E600</span>,
+  0 0 16px rgba(<span class="val">243,230,0,0.4</span>);
+text-shadow:
+  0 0 12px rgba(<span class="val">243,230,0,0.8</span>);</code></pre>
+    </div>
+    <div>
+      <div class="glow-demo glow-teal-demo">TEAL NET GLOW</div>
+      <pre style="margin-top:8px;font-size:9px;"><code style="font-size:9px;">box-shadow:
+  0 0 0 1px <span class="val">#55EAD4</span>,
+  0 0 16px rgba(<span class="val">85,234,212,0.4</span>);
+text-shadow:
+  0 0 12px rgba(<span class="val">85,234,212,0.8</span>);</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 07 — BACKGROUNDS
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 07</span>
+    <div>
+      <div class="section-title">BACKGROUND SYSTEM</div>
+      <div class="section-desc">All background effects are CSS-only. Applied as fixed overlays to avoid performance hits. Grid uses red tint to maintain Neo Militarism palette coherence.</div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div>
+      <div class="bg-demo" style="background:#000;background-image:linear-gradient(rgba(197,0,60,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(197,0,60,0.04) 1px,transparent 1px);background-size:40px 40px;">
+        <div class="bg-label">GRID-BG</div>
+      </div>
+      <div class="geom-label">Red Grid Overlay</div>
+      <div class="geom-value">40px × 40px · rgba(197,0,60,0.04)</div>
+    </div>
+    <div>
+      <div class="bg-demo" style="background:radial-gradient(ellipse at center,#050608 40%,#000 100%);">
+        <div class="bg-label">VIGNETTE</div>
+      </div>
+      <div class="geom-label">Radial Vignette</div>
+      <div class="geom-value">Fixed overlay · darkens edges</div>
+    </div>
+    <div>
+      <div class="bg-demo" style="background:#050608;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);">
+        <div class="bg-label">SCANLINES</div>
+      </div>
+      <div class="geom-label">CRT Scanline Texture</div>
+      <div class="geom-value">4px cycle · rgba(0,0,0,0.03–0.05)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 08 — ANIMATION RULES
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 08</span>
+    <div>
+      <div class="section-title">ANIMATION — OFFICIAL PATTERNS</div>
+      <div class="section-desc">Documented in Part 2: "schematically showing why our HUD is curved by the shader." Glitch + flicker = signature effects. HUD has viewport-curve perspective transform.</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;margin-bottom:8px;">// GLITCH TEXT (HERO NAME)</div>
+      <pre><code><span class="cmt">/* ::before = red offset, ::after = teal offset */</span>
+<span class="kw">.cp-glitch</span> { position: <span class="val">relative</span>; }
+<span class="kw">.cp-glitch::before</span> {
+  content: attr(<span class="str">data-text</span>);
+  position: <span class="val">absolute</span>; inset: 0;
+  color: <span class="val">#FF003C</span>;     <span class="cmt">/* red offset layer */</span>
+  animation: glitch-red 6s steps(2) infinite;
+  clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+}
+<span class="kw">.cp-glitch::after</span> {
+  content: attr(<span class="str">data-text</span>);
+  color: <span class="val">#55EAD4</span>;     <span class="cmt">/* teal offset layer */</span>
+  animation: glitch-teal 6s steps(2) infinite 0.1s;
+  clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+}
+<span class="kw">@keyframes</span> glitch-red {
+  0%,88%,100% { transform: translate(0); opacity: 0; }
+  89%  { transform: translate(<span class="val">-3px,1px</span>);  opacity: 0.8; }
+  91%  { transform: translate(<span class="val">3px,-1px</span>);  opacity: 0.8; }
+  93%  { transform: translate(<span class="val">-2px,2px</span>); opacity: 0.6; }
+  97%  { transform: translate(0);         opacity: 0; }
+}</code></pre>
+    </div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;margin-bottom:8px;">// SCREEN FLICKER + PULSE GLOW</div>
+      <pre><code><span class="cmt">/* Ambient screen flicker — full page */</span>
+<span class="kw">@keyframes</span> cp-flicker {
+  0%,100%  { opacity: 1;    }
+  92%      { opacity: 1;    }
+  93%      { opacity: 0.85; }
+  94%      { opacity: 1;    }
+  96.5%    { opacity: 0.9;  }
+  97%      { opacity: 1;    }
+}
+<span class="cmt">/* Neon pulse — active panel borders */</span>
+<span class="kw">@keyframes</span> cp-pulse-glow {
+  0%,100% {
+    box-shadow: 0 0 0 1px <span class="val">#C5003C</span>,
+                0 0 8px rgba(<span class="val">197,0,60</span>,0.4);
+  }
+  50%     {
+    box-shadow: 0 0 0 1px <span class="val">#C5003C</span>,
+                0 0 20px rgba(<span class="val">197,0,60</span>,0.8),
+                0 0 40px rgba(<span class="val">197,0,60</span>,0.3);
+  }
+}
+<span class="cmt">/* HUD viewport curve (from Part 2 Art Bible) */</span>
+<span class="kw">.cp-hud</span> {
+  transform: perspective(<span class="val">1200px</span>) rotateX(<span class="val">1.5deg</span>);
+}</code></pre>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;margin:12px 0 8px;">// TYPEWRITER / BOOT SEQUENCE</div>
+      <pre><code><span class="kw">.cp-typewriter</span> {
+  overflow: hidden; white-space: nowrap;
+  border-right: 2px solid <span class="val">#C5003C</span>;
+  width: 0;
+  animation: type 2s steps(30,end) forwards,
+             blink 0.75s step-end infinite;
+}
+<span class="kw">@keyframes</span> type  { to { width: <span class="val">100%</span>; } }
+<span class="kw">@keyframes</span> blink { 50% { border-color: transparent; } }</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 09 — FULLSCREEN PANELS CATALOGUE
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 09</span>
+    <div>
+      <div class="section-title">FULLSCREEN PANELS — FROM PART 2</div>
+      <div class="section-desc">Documented in Part 2 (behance.net/gallery/133185623), Part 05 chapter: "perfectly organized layouts, and systematic interactions." Layout principle: left nav rail + right content area.</div>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "The essence of the fullscreen panels is their informative purpose, perfectly organized layouts, and systematic interactions leading to a comfortable and clear enough user experience while the player operates and interacts with them. Fullscreen panels are covering and delivering large sums of data about the world of Cyberpunk 2077."
+    <cite>— VLADIMÍR VILIMOVSKÝ, Part 2 (Part 05 — Fullscreen Panels)</cite>
+  </div>
+
+  <div class="grid-3 mt-16">
+    <div class="panel-card"><div class="panel-icon">👤</div><div><div class="panel-info-name">CHARACTER CREATION</div><div class="panel-info-desc">Model left, attribute sliders right. Heavy Rajdhani data labels. Framer Motion animated on entry.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">◈</div><div><div class="panel-info-name">HUB MENU</div><div class="panel-info-desc">Radial or list navigation. Red active indicator line. Section code identifiers (e.g. // 01).</div></div></div>
+    <div class="panel-card"><div class="panel-icon">⊞</div><div><div class="panel-info-name">INVENTORY</div><div class="panel-info-desc">Grid of item slots. Item preview panel on right. Stats comparison bar charts.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">◎</div><div><div class="panel-info-name">MAP</div><div class="panel-info-desc">Dark cartographic base. Red player marker. Waypoint system with chamfered pin icons.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">⬡</div><div><div class="panel-info-name">ATTRIBUTES & SKILLS</div><div class="panel-info-desc">Tree / list of skills. Segmented progress bars. Level numerals in Orbitron. Category colors.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">≡</div><div><div class="panel-info-name">STATS PANEL</div><div class="panel-info-desc">Dense data readout. Stat names in Rajdhani 400, values in Rajdhani 700.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">📋</div><div><div class="panel-info-name">JOURNAL / CODEX</div><div class="panel-info-desc">Left nav tree + right content area. Typography-heavy layout. Rajdhani body text.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">✦</div><div><div class="panel-info-name">TAROT CARDS</div><div class="panel-info-desc">Collectible system. Full-bleed art with Neo Militarism data overlay at bottom.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">◐</div><div><div class="panel-info-name">APPEARANCE / V</div><div class="panel-info-desc">Character customization. Live 3D preview left. Option panels right with Rajdhani labels.</div></div></div>
+  </div>
+
+  <div class="mt-16" style="font-size:10px;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-mono)">// HUD ELEMENTS (Part 2, Part 09)</div>
+  <div class="grid-3">
+    <div class="panel-card"><div class="panel-icon">⚡</div><div><div class="panel-info-name">INTERACTION PROMPT</div><div class="panel-info-desc">Speedometer · Dialog choice · Quest tracker</div></div></div>
+    <div class="panel-card"><div class="panel-icon">🚗</div><div><div class="panel-info-name">CALL VEHICLE POPUP</div><div class="panel-info-desc">Chamfered popup card, vehicle data readout</div></div></div>
+    <div class="panel-card"><div class="panel-icon">💬</div><div><div class="panel-info-name">CONTACTS / MESSAGES</div><div class="panel-info-desc">Text message popup · Radio stations selector</div></div></div>
+    <div class="panel-card"><div class="panel-icon">🔍</div><div><div class="panel-info-name">SCANNER</div><div class="panel-info-desc">AR overlay with teal NET data readouts on enemies/objects</div></div></div>
+    <div class="panel-card"><div class="panel-icon">⌨</div><div><div class="panel-info-name">HACKING MINIGAME</div><div class="panel-info-desc">Full teal palette. Matrix-style code grid. Monospace font throughout.</div></div></div>
+    <div class="panel-card"><div class="panel-icon">🎬</div><div><div class="panel-info-name">BRAINDANCE 2.0</div><div class="panel-info-desc">Timeline scrubber. Layer controls (EMO/VISUAL/AUDIO). Film-editing aesthetic.</div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 10 — TAILWIND IMPLEMENTATION TOKENS
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 10</span>
+    <div>
+      <div class="section-title">TAILWIND CONFIG — PRODUCTION TOKENS</div>
+      <div class="section-desc">Complete tailwind.config.ts replacing the incorrect version in AGENT_PLAN.md. Primary accent corrected to Red (#C5003C). Font roles corrected (Rajdhani = UI primary).</div>
+    </div>
+  </div>
+
+  <pre><code><span class="cmt">// tailwind.config.ts — DEFINITIVE VERSION</span>
+<span class="cmt">// Source: Vilimovský Behance portfolio + confirmed cross-references</span>
+<span class="kw">import</span> type { Config } from <span class="str">'tailwindcss'</span>
+
+<span class="kw">const</span> config: Config = {
+  content: [<span class="str">'./app/**/*.{ts,tsx}'</span>, <span class="str">'./components/**/*.{ts,tsx}'</span>],
+  theme: {
+    extend: {
+      colors: {
+        <span class="cmt">// ── PRIMARY PALETTE (Confirmed: color-hex.com/1041326) ──</span>
+        <span class="str">'cp-red'</span>:        <span class="str">'#C5003C'</span>,   <span class="cmt">// PRIMARY — Neo Militarism player UI</span>
+        <span class="str">'cp-red-dark'</span>:   <span class="str">'#880425'</span>,   <span class="cmt">// Pressed / deep fill</span>
+        <span class="str">'cp-red-glow'</span>:   <span class="str">'#FF003C'</span>,   <span class="cmt">// Neon bloom only (never fill)</span>
+        <span class="str">'cp-yellow'</span>:     <span class="str">'#F3E600'</span>,   <span class="cmt">// Secondary accent / warnings</span>
+        <span class="str">'cp-yellow-alt'</span>: <span class="str">'#FCEC0C'</span>,   <span class="cmt">// Art Bible yellow variant</span>
+        <span class="str">'cp-teal'</span>:       <span class="str">'#55EAD4'</span>,   <span class="cmt">// Tertiary — hacker/NET only</span>
+        <span class="str">'cp-teal-dark'</span>:  <span class="str">'#136377'</span>,   <span class="cmt">// Dark teal variant</span>
+        <span class="str">'cp-gold'</span>:       <span class="str">'#D8BC66'</span>,   <span class="cmt">// Neo Kitsch / legend tier</span>
+        <span class="str">'cp-olive'</span>:      <span class="str">'#978D01'</span>,   <span class="cmt">// Inactive/disabled state</span>
+        <span class="str">'cp-earth'</span>:      <span class="str">'#58482C'</span>,   <span class="cmt">// Entropism reference</span>
+        <span class="cmt">// ── SURFACES ──</span>
+        <span class="str">'cp-black'</span>:      <span class="str">'#000000'</span>,
+        <span class="str">'cp-surface'</span>:    <span class="str">'#0D0D0D'</span>,
+        <span class="str">'cp-surface-2'</span>:  <span class="str">'#111318'</span>,
+        <span class="str">'cp-border'</span>:     <span class="str">'#1C2030'</span>,
+        <span class="str">'cp-muted'</span>:      <span class="str">'#3A4060'</span>,
+        <span class="str">'cp-text'</span>:       <span class="str">'#A8B0C8'</span>,
+        <span class="str">'cp-bright'</span>:     <span class="str">'#E8ECF8'</span>,
+      },
+      fontFamily: {
+        <span class="cmt">// CONFIRMED: fontsinuse.com/uses/60926</span>
+        <span class="str">'ui'</span>:      [<span class="str">'Rajdhani'</span>, <span class="str">'sans-serif'</span>],       <span class="cmt">// PRIMARY — entire game UI</span>
+        <span class="str">'display'</span>: [<span class="str">'Orbitron'</span>, <span class="str">'sans-serif'</span>],       <span class="cmt">// SECONDARY — decorative only</span>
+        <span class="str">'mono'</span>:    [<span class="str">'Share Tech Mono'</span>, <span class="str">'monospace'</span>], <span class="cmt">// Terminal / hacking</span>
+      },
+      letterSpacing: {
+        <span class="str">'ui'</span>:      <span class="str">'0.04em'</span>,   <span class="cmt">// Body copy</span>
+        <span class="str">'label'</span>:   <span class="str">'0.1em'</span>,    <span class="cmt">// Nav / data labels</span>
+        <span class="str">'display'</span>: <span class="str">'0.18em'</span>,   <span class="cmt">// Orbitron section headers</span>
+        <span class="str">'hero'</span>:    <span class="str">'0.25em'</span>,   <span class="cmt">// Orbitron hero name</span>
+      },
+      keyframes: {
+        <span class="str">'cp-glitch-red'</span>: {
+          <span class="str">'0%,88%,100%'</span>: { transform: <span class="str">'translate(0)'</span>, opacity: <span class="str">'0'</span> },
+          <span class="str">'89%'</span>: { transform: <span class="str">'translate(-3px,1px)'</span>,  opacity: <span class="str">'0.8'</span> },
+          <span class="str">'91%'</span>: { transform: <span class="str">'translate(3px,-1px)'</span>,  opacity: <span class="str">'0.8'</span> },
+          <span class="str">'93%'</span>: { transform: <span class="str">'translate(-2px,2px)'</span>, opacity: <span class="str">'0.6'</span> },
+          <span class="str">'97%'</span>: { transform: <span class="str">'translate(0)'</span>,         opacity: <span class="str">'0'</span> },
+        },
+        <span class="str">'cp-flicker'</span>: {
+          <span class="str">'0%,100%'</span>: { opacity: <span class="str">'1'</span>    },
+          <span class="str">'93%'</span>:     { opacity: <span class="str">'0.85'</span> },
+          <span class="str">'94%'</span>:     { opacity: <span class="str">'1'</span>    },
+          <span class="str">'96.5%'</span>:   { opacity: <span class="str">'0.9'</span>  },
+          <span class="str">'97%'</span>:     { opacity: <span class="str">'1'</span>    },
+        },
+        <span class="str">'cp-pulse-glow'</span>: {
+          <span class="str">'0%,100%'</span>: { boxShadow: <span class="str">'0 0 0 1px #C5003C, 0 0 8px rgba(197,0,60,0.4)'</span> },
+          <span class="str">'50%'</span>:     { boxShadow: <span class="str">'0 0 0 1px #C5003C, 0 0 20px rgba(197,0,60,0.8), 0 0 40px rgba(197,0,60,0.3)'</span> },
+        },
+      },
+      animation: {
+        <span class="str">'glitch-red'</span>:  <span class="str">'cp-glitch-red 6s steps(2) infinite'</span>,
+        <span class="str">'flicker'</span>:     <span class="str">'cp-flicker 8s ease-in-out infinite'</span>,
+        <span class="str">'pulse-glow'</span>:  <span class="str">'cp-pulse-glow 3s ease-in-out infinite'</span>,
+      },
+      boxShadow: {
+        <span class="str">'cp'</span>:       <span class="str">'0 0 0 1px #C5003C, 0 0 8px rgba(197,0,60,0.4)'</span>,
+        <span class="str">'cp-hover'</span>: <span class="str">'0 0 0 1px #C5003C, 0 0 20px rgba(197,0,60,0.6), 0 0 40px rgba(197,0,60,0.2)'</span>,
+        <span class="str">'cp-teal'</span>:  <span class="str">'0 0 0 1px #55EAD4, 0 0 8px rgba(85,234,212,0.4)'</span>,
+        <span class="str">'cp-yellow'</span>:<span class="str">'0 0 0 1px #F3E600, 0 0 8px rgba(243,230,0,0.4)'</span>,
+      },
+      backgroundImage: {
+        <span class="str">'cp-grid'</span>: <span class="str">'linear-gradient(rgba(197,0,60,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(197,0,60,0.04) 1px,transparent 1px)'</span>,
+      },
+      backgroundSize: { <span class="str">'cp-grid'</span>: <span class="str">'40px 40px'</span> },
+    },
+  },
+}
+
+<span class="kw">export default</span> config</code></pre>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 11 — CORRECTIONS TO AGENT_PLAN.MD
+     ════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 11</span>
+    <div>
+      <div class="section-title">CORRECTIONS TO AGENT_PLAN.MD</div>
+      <div class="section-desc">The previous AGENT_PLAN.md contained design inaccuracies. This section lists every correction. Agent must apply these when implementing.</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Item</th><th>AGENT_PLAN.md (WRONG)</th><th>THIS DOCUMENT (CORRECT)</th><th>Source</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Primary accent color</td>
+        <td style="color:#880425;">#FCE300 yellow</td>
+        <td style="color:var(--teal);">#C5003C red — Neo Militarism primary</td>
+        <td class="td-role">Vilimovský Part 2 + color-hex.com/1041326</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Primary UI font</td>
+        <td style="color:#880425;">Orbitron listed as body/UI</td>
+        <td style="color:var(--teal);">Rajdhani = entire game UI. Orbitron = secondary only</td>
+        <td class="td-role">fontsinuse.com/uses/60926</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Yellow role</td>
+        <td style="color:#880425;">Primary brand / hero color</td>
+        <td style="color:var(--teal);">Secondary accent, warnings, highlights only</td>
+        <td class="td-role">Vilimovský: "RED is primary"</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Cyan/Teal role</td>
+        <td style="color:#880425;">Listed as primary accent</td>
+        <td style="color:var(--teal);">Tertiary — hacker/NET contexts ONLY</td>
+        <td class="td-role">Art Bible color system</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Glitch layer colors</td>
+        <td style="color:#880425;">Generic / not specified</td>
+        <td style="color:var(--teal);">::before = #FF003C red · ::after = #55EAD4 teal</td>
+        <td class="td-role">Official animation pattern</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Grid overlay color</td>
+        <td style="color:#880425;">rgba(0,212,255,0.03) cyan grid</td>
+        <td style="color:var(--teal);">rgba(197,0,60,0.04) red grid — maintains palette</td>
+        <td class="td-role">Neo Militarism color coherence</td>
+      </tr>
+      <tr>
+        <td style="color:var(--text-bright);font-weight:600;">Tailwind fontFamily</td>
+        <td style="color:#880425;">font-display: Orbitron for sections</td>
+        <td style="color:var(--teal);">font-ui: Rajdhani for sections, font-display: Orbitron for logo/hero</td>
+        <td class="td-role">fontsinuse.com/uses/60926</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- QUICK REF -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-num">// 12</span>
+    <div><div class="section-title">QUICK REFERENCE CHEATSHEET</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="panel panel-accent" style="padding:16px 20px;">
+      <div class="panel-label">TOKENS</div>
+      <div style="margin-top:8px;">
+        <div class="rule-row"><span class="rule-key">PRIMARY RED</span><span class="rule-val"><code class="inline">#C5003C</code> — active, selected, borders, primary CTAs</span></div>
+        <div class="rule-row"><span class="rule-key">RED DARK</span><span class="rule-val"><code class="inline">#880425</code> — pressed fills, shadow layer</span></div>
+        <div class="rule-row"><span class="rule-key">RED GLOW</span><span class="rule-val"><code class="inline">#FF003C</code> — neon box-shadow only, never fill</span></div>
+        <div class="rule-row"><span class="rule-key">YELLOW</span><span class="rule-val"><code class="inline">#F3E600</code> — secondary, warnings, featured badges</span></div>
+        <div class="rule-row"><span class="rule-key">TEAL</span><span class="rule-val"><code class="inline">#55EAD4</code> — NET/hacker contexts, terminal, success</span></div>
+        <div class="rule-row"><span class="rule-key">GOLD</span><span class="rule-val"><code class="inline">#D8BC66</code> — legend tier, Neo Kitsch reference</span></div>
+        <div class="rule-row"><span class="rule-key">FONT UI</span><span class="rule-val">Rajdhani 400/500/600/700 — all game UI</span></div>
+        <div class="rule-row"><span class="rule-key">FONT DISPLAY</span><span class="rule-val">Orbitron — hero name, logo, stat values</span></div>
+        <div class="rule-row"><span class="rule-key">FONT MONO</span><span class="rule-val">Share Tech Mono — terminal, data, annotations</span></div>
+      </div>
+    </div>
+    <div class="panel" style="padding:16px 20px;">
+      <div class="panel-label">RULES</div>
+      <div style="margin-top:8px;">
+        <div class="rule-row"><span class="rule-key">BORDER-RADIUS</span><span class="rule-val"><strong>0px always.</strong> Chamfer via clip-path only.</span></div>
+        <div class="rule-row"><span class="rule-key">CHAMFER STD</span><span class="rule-val">16px — panels · 8px — buttons/chips</span></div>
+        <div class="rule-row"><span class="rule-key">TRACKING</span><span class="rule-val">0.04em body · 0.1em labels · 0.18em Orbitron · 0.25em hero</span></div>
+        <div class="rule-row"><span class="rule-key">GLITCH</span><span class="rule-val">::before red (#FF003C) · ::after teal (#55EAD4)</span></div>
+        <div class="rule-row"><span class="rule-key">GLOW SHADOW</span><span class="rule-val">0 0 0 1px #C5003C, 0 0 8px rgba(197,0,60,0.4)</span></div>
+        <div class="rule-row"><span class="rule-key">GRID BG</span><span class="rule-val">40px×40px · rgba(197,0,60,0.04) on #000</span></div>
+        <div class="rule-row"><span class="rule-key">HUD CURVE</span><span class="rule-val">perspective(1200px) rotateX(1.5deg) — documented in Part 2</span></div>
+        <div class="rule-row"><span class="rule-key">ALL-CAPS</span><span class="rule-val">Mandatory on all UI labels, nav, tags, buttons</span></div>
+        <div class="rule-row"><span class="rule-key">RED IS NOT ERROR</span><span class="rule-val">Red = primary identity. Yellow = warnings. Never remap.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="divider"></div>
+<div class="footer">
+  <div class="footer-credits">
+    <strong>PRIMARY SOURCE</strong> — Vladimír Vilimovský, Senior UI Artist, CD PROJEKT RED<br>
+    behance.net/gallery/118663901 (Part 1) · behance.net/gallery/133185623 (Part 2)<br>
+    Game Days 2022 Talk: "The Art of UI" · youtube.com/watch?v=b4S8uCIMN_Y<br>
+    Typography: fontsinuse.com/uses/60926 · Colors: color-hex.com/color-palette/1041326<br>
+    © 2022 CD PROJEKT S.A. All UI design rights reserved. This document is a reference compilation.
+  </div>
+  <div style="font-family:var(--font-display);font-size:9px;font-weight:900;color:var(--red);letter-spacing:0.3em;text-align:right;">
+    CP//2077<br>
+    <span style="color:var(--text-dim);font-size:8px;letter-spacing:0.2em;">DESIGN BIBLE v2.0</span>
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
