@@ -1,0 +1,29 @@
+import HeroSection from '@/components/sections/HeroSection'
+import ProjectsGrid from '@/components/sections/ProjectsGrid'
+import GlitchText from '@/components/ui/GlitchText'
+import NeonButton from '@/components/ui/NeonButton'
+import { api } from '@/lib/api'
+
+export default async function HomePage() {
+  const [profile, featured] = await Promise.all([
+    api.getProfile().catch(() => null),
+    api.getProjects(true).catch(() => []),
+  ])
+
+  return (
+    <>
+      <HeroSection profile={profile} />
+      {featured.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 pb-20">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-[var(--font-display)] text-2xl tracking-wider">
+              <GlitchText text="// FEATURED OPS" />
+            </h2>
+            <NeonButton href="/projects" accent="yellow">All Projects</NeonButton>
+          </div>
+          <ProjectsGrid projects={featured} />
+        </section>
+      )}
+    </>
+  )
+}

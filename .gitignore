@@ -1,0 +1,27 @@
+# Node
+node_modules/
+.next/
+out/
+.pnpm-store/
+
+# Java / Maven
+backend/target/
+*.class
+*.jar
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.claude/
+
+# OS
+.DS_Store
+
+# Env / secrets — yml files use ${ENV_VAR} so they're safe to commit
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/src/main/resources/application-prod.yml
