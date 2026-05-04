@@ -1,0 +1,11 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+  "name": "Personal Web App Dev Container",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "docker-compose.yml"
+  ],
+  "service": "supabase-db",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "shutdownAction": "stopCompose"
+}

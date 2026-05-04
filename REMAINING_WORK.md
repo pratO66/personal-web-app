@@ -118,6 +118,7 @@ IF tech tags / terminal inputs             → teal context OK
 - [ ] Browser DevTools: confirm `/api/profile`, `/api/projects`, `/api/experience` succeed with no CORS errors
 - [ ] Submit contact form, confirm row appears in `messages` table (verify via Supabase MCP `execute_sql`)
 - [ ] Configure SMTP (`MAIL_USER`, `MAIL_PASS` in `backend/.env`) and verify email sends
+- [ ] Ensure all required secrets (database, JWT, SMTP, admin hash, external API keys) are stored only in environment variables and never hardcoded
 - [ ] Add Suspense + skeleton loaders for each data-fetching page
 - [ ] Add `error.tsx` boundary for API failures
 - [ ] Test 375px viewport: navbar collapses, timeline stacks, cards reflow
