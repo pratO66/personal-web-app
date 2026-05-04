@@ -1,10 +1,10 @@
 import { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react'
 
-type Accent = 'cyan' | 'yellow' | 'magenta'
+type Accent = 'red' | 'yellow' | 'teal'
 const colors: Record<Accent, string> = {
-  cyan: '#00D4FF',
-  yellow: '#FCE300',
-  magenta: '#FF003C',
+  red: '#C5003C',
+  yellow: '#F3E600',
+  teal: '#55EAD4',
 }
 
 interface Common {
@@ -16,7 +16,7 @@ type AsButton = Common & ButtonHTMLAttributes<HTMLButtonElement> & { href?: unde
 type AsLink = Common & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 type Props = AsButton | AsLink
 
-export default function NeonButton({ accent = 'cyan', children, ...rest }: Props) {
+export default function NeonButton({ accent = 'red', children, ...rest }: Props) {
   const color = colors[accent]
   const className = `hud-clip inline-flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-[0.25em] font-[var(--font-mono)] transition-all border bg-transparent hover:bg-[color:var(--bg)] cursor-pointer`
   const style = {

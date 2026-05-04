@@ -4,9 +4,9 @@ import { motion } from 'framer-motion'
 import type { Skill } from '@/lib/types'
 
 function colorFor(level: number) {
-  if (level > 70) return '#00D4FF'
-  if (level >= 40) return '#FCE300'
-  return '#FF003C'
+  if (level > 70) return '#C5003C'
+  if (level >= 40) return '#F3E600'
+  return '#55EAD4'
 }
 
 export default function SkillBar({ skill }: { skill: Skill }) {
@@ -17,7 +17,7 @@ export default function SkillBar({ skill }: { skill: Skill }) {
         <span className="text-cp-text">{skill.name}</span>
         <span style={{ color }}>{skill.level.toString().padStart(3, '0')}%</span>
       </div>
-      <div className="h-2 w-full bg-[#1E2235]/60 overflow-hidden">
+      <div className="h-2 w-full overflow-hidden" style={{ backgroundColor: 'rgba(197,0,60,0.04)' }}>
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${skill.level}%` }}

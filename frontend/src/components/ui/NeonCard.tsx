@@ -6,12 +6,12 @@ export default function NeonCard({ project }: { project: Project }) {
     <div className="relative group">
       <span
         aria-hidden
-        className="absolute left-0 top-0 h-full w-[3px] bg-cp-magenta z-10"
+        className="absolute left-0 top-0 h-full w-[3px] bg-cp-red z-10"
         style={{ boxShadow: '0 0 10px #FF003C' }}
       />
-      <HUDChrome accent="cyan" title={project.featured ? 'Featured · Project' : 'Project'} className="h-full transition-all group-hover:[box-shadow:0_0_20px_#00D4FF66]">
+      <HUDChrome accent="red" title={project.featured ? 'Featured · Project' : 'Project'} className="h-full transition-all group-hover:[box-shadow:0_0_20px_#C5003C66]">
         <div className="space-y-3">
-          <h3 className="font-[var(--font-display)] text-lg text-cp-cyan tracking-wider">
+          <h3 className="font-[var(--font-display)] text-lg text-cp-red tracking-wider">
             {project.title}
           </h3>
           <p className="text-sm text-cp-text/80">{project.description}</p>
@@ -19,7 +19,7 @@ export default function NeonCard({ project }: { project: Project }) {
             {project.tags.map((t) => (
               <span
                 key={t}
-                className="text-[10px] uppercase tracking-widest px-2 py-0.5 border border-cp-cyan/40 text-cp-cyan/90"
+                className="text-[10px] uppercase tracking-widest px-2 py-0.5 border border-cp-teal/40 text-cp-teal/90"
               >
                 {t}
               </span>
@@ -41,7 +41,7 @@ export default function NeonCard({ project }: { project: Project }) {
                 href={project.repoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-cp-text hover:text-cp-cyan"
+                className="text-cp-text hover:text-cp-red"
               >
                 ▶ REPO
               </a>

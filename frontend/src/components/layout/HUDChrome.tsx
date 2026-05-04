@@ -1,11 +1,11 @@
 import { ReactNode } from 'react'
 
-type Accent = 'cyan' | 'yellow' | 'magenta'
+type Accent = 'red' | 'yellow' | 'teal'
 
 const accentMap: Record<Accent, string> = {
-  cyan: '#00D4FF',
-  yellow: '#FCE300',
-  magenta: '#FF003C',
+  red: '#C5003C',
+  yellow: '#F3E600',
+  teal: '#55EAD4',
 }
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
   className?: string
 }
 
-export default function HUDChrome({ children, title, accent = 'cyan', className = '' }: Props) {
+export default function HUDChrome({ children, title, accent = 'red', className = '' }: Props) {
   const color = accentMap[accent]
   return (
     <div

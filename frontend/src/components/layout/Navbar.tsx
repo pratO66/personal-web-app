@@ -24,7 +24,7 @@ export default function Navbar() {
         </Link>
         <button
           aria-label="menu"
-          className="md:hidden text-cp-cyan text-xs uppercase tracking-widest"
+          className="md:hidden text-cp-red text-xs uppercase tracking-widest"
           onClick={() => setOpen((o) => !o)}
         >
           {open ? '✕ CLOSE' : '≡ MENU'}
@@ -36,11 +36,10 @@ export default function Navbar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className={`relative px-1 py-1 transition-colors ${
-                    active ? 'text-cp-cyan' : 'text-cp-text hover:text-cp-cyan'
-                  }`}
+                  className={`relative px-1 py-1 transition-colors ${active ? 'text-cp-red' : 'text-cp-text hover:text-cp-red'
+                    }`}
                 >
-                  {active && <span className="mr-1 text-cp-magenta">▮</span>}
+                  {active && <span className="mr-1 text-cp-red">▮</span>}
                   {l.label}
                 </Link>
               </li>
@@ -49,15 +48,14 @@ export default function Navbar() {
         </ul>
       </nav>
       {open && (
-        <ul className="md:hidden border-t border-cp-border bg-cp-panel">
+        <ul className="md:hidden border-t border-cp-red bg-cp-panel">
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className={`block px-4 py-3 text-xs uppercase tracking-widest border-b border-cp-border ${
-                  pathname === l.href ? 'text-cp-cyan' : 'text-cp-text'
-                }`}
+                className={`block px-4 py-3 text-xs uppercase tracking-widest border-b border-cp-border ${pathname === l.href ? 'text-cp-red' : 'text-cp-text'
+                  }`}
               >
                 {l.label}
               </Link>

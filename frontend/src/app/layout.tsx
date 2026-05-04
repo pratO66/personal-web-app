@@ -1,8 +1,15 @@
 import type { Metadata } from 'next'
-import { Orbitron, Share_Tech_Mono } from 'next/font/google'
+import { Rajdhani, Orbitron, Share_Tech_Mono } from 'next/font/google'
 import './globals.css'
 import ScanlineOverlay from '@/components/layout/ScanlineOverlay'
 import Navbar from '@/components/layout/Navbar'
+
+const rajdhani = Rajdhani({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-ui',
+  display: 'swap',
+})
 
 const orbitron = Orbitron({
   subsets: ['latin'],
@@ -24,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${orbitron.variable} ${shareTechMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${rajdhani.variable} ${orbitron.variable} ${shareTechMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-cp-dark text-cp-text">
         <ScanlineOverlay />
         <Navbar />
