@@ -12,7 +12,7 @@ export default async function ProjectsPage() {
         <GlitchText text="// PROJECTS" />
       </h1>
       {projects.length === 0 ? (
-        <p className="text-cp-magenta font-[var(--font-mono)]">// No projects loaded //</p>
+        <p className="text-cp-red font-[var(--font-mono)]">// No projects loaded //</p>
       ) : (
         <ProjectsGrid projects={projects} />
       )}

@@ -50,7 +50,7 @@ export default function ContactForm() {
             {status === 'sending' ? 'Transmitting…' : 'Send Burst'}
           </NeonButton>
           {msg && (
-            <span className={`text-xs uppercase tracking-widest ${status === 'sent' ? 'text-cp-teal' : 'text-cp-magenta'}`}>
+            <span className={`text-xs uppercase tracking-widest ${status === 'sent' ? 'text-cp-teal' : 'text-cp-red'}`}>
               » {msg}
             </span>
           )}

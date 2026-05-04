@@ -24,9 +24,27 @@ const shareTechMono = Share_Tech_Mono({
   display: 'swap',
 })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://personal-web-app.vercel.app'
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? 'V // Night City Dev'
+
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_SITE_NAME ?? 'V // Night City Dev',
-  description: 'Personal resume — full-stack engineer, Night City protocols.',
+  title: { default: siteName, template: `%s | ${siteName}` },
+  description: 'Full-stack engineer — Java, Spring Boot, React, Next.js. Night City protocols.',
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    title: siteName,
+    description: 'Full-stack engineer — Java, Spring Boot, React, Next.js.',
+    url: siteUrl,
+    siteName,
+    type: 'website',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: siteName }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteName,
+    description: 'Full-stack engineer — Java, Spring Boot, React, Next.js.',
+    images: ['/og.png'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -14,7 +14,7 @@ export default async function SkillsPage() {
         <GlitchText text="// LOADOUT" />
       </h1>
       {skills.length === 0 ? (
-        <p className="text-cp-magenta font-[var(--font-mono)]">// Loadout empty //</p>
+        <p className="text-cp-red font-[var(--font-mono)]">// Loadout empty //</p>
       ) : (
         <SkillsChart skills={skills} />
       )}
