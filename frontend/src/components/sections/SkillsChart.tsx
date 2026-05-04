@@ -30,8 +30,8 @@ export default function SkillsChart({ skills }: { skills: Skill[] }) {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${
               filter === f
-                ? 'border-cp-cyan text-cp-cyan bg-cp-cyan/10'
-                : 'border-cp-border text-cp-text hover:border-cp-cyan/60'
+                ? 'border-cp-teal text-cp-teal bg-cp-teal/10'
+                : 'border-cp-border text-cp-text hover:border-cp-teal/60'
             }`}
           >
             {f}
@@ -40,7 +40,7 @@ export default function SkillsChart({ skills }: { skills: Skill[] }) {
       </div>
       <div className="grid md:grid-cols-2 gap-6">
         {grouped.map((g) => (
-          <HUDChrome key={g.cat} title={g.cat} accent="cyan">
+          <HUDChrome key={g.cat} title={g.cat} accent="teal">
             <div className="space-y-4">
               {g.items.map((s) => (
                 <SkillBar key={s.name} skill={s} />

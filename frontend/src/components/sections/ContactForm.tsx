@@ -37,7 +37,7 @@ export default function ContactForm() {
   }
 
   return (
-    <HUDChrome accent="cyan" title="secure_channel.tx">
+    <HUDChrome accent="teal" title="secure_channel.tx">
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <TerminalInput label="Handle" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -46,11 +46,11 @@ export default function ContactForm() {
         <TerminalInput label="Subject" required value={subject} onChange={(e) => setSubject(e.target.value)} />
         <TerminalInput label="Payload" multiline required value={body} onChange={(e) => setBody(e.target.value)} />
         <div className="flex items-center gap-4 flex-wrap">
-          <NeonButton type="submit" accent="cyan" disabled={status === 'sending'}>
+          <NeonButton type="submit" accent="teal" disabled={status === 'sending'}>
             {status === 'sending' ? 'Transmitting…' : 'Send Burst'}
           </NeonButton>
           {msg && (
-            <span className={`text-xs uppercase tracking-widest ${status === 'sent' ? 'text-cp-cyan' : 'text-cp-magenta'}`}>
+            <span className={`text-xs uppercase tracking-widest ${status === 'sent' ? 'text-cp-teal' : 'text-cp-magenta'}`}>
               » {msg}
             </span>
           )}

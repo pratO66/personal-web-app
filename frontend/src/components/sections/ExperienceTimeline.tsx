@@ -23,14 +23,14 @@ export default function ExperienceTimeline({ items }: { items: Experience[] }) {
             <li key={e.id} className="relative md:grid md:grid-cols-2 md:gap-10">
               <span
                 aria-hidden
-                className="absolute left-4 md:left-1/2 top-4 -translate-x-1/2 w-3 h-3 rotate-45 bg-cp-cyan"
+                className="absolute left-4 md:left-1/2 top-4 -translate-x-1/2 w-3 h-3 rotate-45 bg-cp-teal"
                 style={{ boxShadow: '0 0 12px #00D4FF' }}
               />
               <div className={`${right ? 'md:col-start-2' : ''} pl-12 md:pl-0 ${right ? 'md:pl-10' : 'md:pr-10 md:text-right'}`}>
-                <HUDChrome accent={e.current ? 'magenta' : 'cyan'} title={fmtRange(e.startDate, e.endDate, e.current)}>
+                <HUDChrome accent={e.current ? 'red' : 'teal'} title={fmtRange(e.startDate, e.endDate, e.current)}>
                   <div className={`space-y-3 ${right ? '' : 'md:text-right'}`}>
                     <h3 className="font-[var(--font-display)] text-xl text-cp-yellow">{e.role}</h3>
-                    <p className="text-cp-cyan text-sm uppercase tracking-widest">
+                    <p className="text-cp-teal text-sm uppercase tracking-widest">
                       @ {e.company} {e.location && <span className="text-cp-muted">· {e.location}</span>}
                     </p>
                     <p className="text-cp-text/80 text-sm">{e.description}</p>
@@ -44,7 +44,7 @@ export default function ExperienceTimeline({ items }: { items: Experience[] }) {
                     {e.technologies?.length > 0 && (
                       <div className={`flex flex-wrap gap-1 pt-1 ${right ? '' : 'md:justify-end'}`}>
                         {e.technologies.map((t) => (
-                          <span key={t} className="text-[10px] uppercase px-2 py-0.5 border border-cp-cyan/40 text-cp-cyan/90">
+                          <span key={t} className="text-[10px] uppercase px-2 py-0.5 border border-cp-teal/40 text-cp-teal/90">
                             {t}
                           </span>
                         ))}

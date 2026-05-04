@@ -182,3 +182,6 @@ cd backend && ./run-dev.sh           # picks up backend/.env automatically
 # Frontend (Next.js)
 cd frontend && pnpm dev              # http://localhost:3000
 ```
+## Design Corrections Required (P0 — must fix before Phase 3 can be marked done)
+
+## need to create docker file for backend and frontend, and add docker compose file to run both together with supabase in dev environment. This will make it easier for anyone to run the project locally without worrying about environment setup.
