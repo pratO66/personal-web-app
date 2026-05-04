@@ -7,7 +7,7 @@ export default function HeroSection({ profile }: { profile: Profile | null }) {
   if (!profile) {
     return (
       <section className="min-h-[70vh] flex items-center justify-center">
-        <p className="text-cp-red">// PROFILE NOT FOUND //</p>
+        <p className="text-cp-red">{'// PROFILE NOT FOUND //'}</p>
       </section>
     )
   }
@@ -21,7 +21,7 @@ export default function HeroSection({ profile }: { profile: Profile | null }) {
           <GlitchText text={profile.name} />
         </h1>
         <p className="font-[var(--font-mono)] text-cp-yellow text-lg">
-          // {profile.tagline}
+          {'// '}{profile.tagline}
         </p>
         <p className="max-w-xl text-cp-text/80 leading-relaxed">{profile.bio}</p>
         <div className="flex flex-wrap gap-3 pt-2">

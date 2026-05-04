@@ -49,7 +49,7 @@ jobs:
 
   # ── Frontend ───────────────────────────────────────────────────────────────
   frontend:
-    name: Frontend — Node 20 / pnpm
+    name: Frontend — Node 22 / pnpm
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -60,7 +60,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - uses: pnpm/action-setup@v4
         with:
@@ -84,7 +84,7 @@ jobs:
         run: pnpm exec tsc --noEmit
 
       - name: Lint
-        run: pnpm exec next lint
+        run: pnpm lint
 
       - name: Build
         run: pnpm build

@@ -12,7 +12,7 @@ export default async function ExperiencePage() {
         <GlitchText text="// CAREER LOG" />
       </h1>
       {items.length === 0 ? (
-        <p className="text-cp-red text-center font-[var(--font-mono)]">// No log entries //</p>
+        <p className="text-cp-red text-center font-[var(--font-mono)]">{'// No log entries //'}</p>
       ) : (
         <ExperienceTimeline items={items} />
       )}
