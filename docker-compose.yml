@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Supabase Database
+  supabase-db:
+    image: supabase/postgres:15.1.0.147
+    container_name: personal-web-app-db
+    environment:
+      POSTGRES_PASSWORD: ${SUPABASE_DB_PASSWORD:-password}
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - supabase-db-data:/var/lib/postgresql/data
+      - ./supabase/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend (Spring Boot)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: personal-web-app-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://supabase-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${SUPABASE_DB_PASSWORD:-password}
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-key-here}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj8lLxKQZK.}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASS: ${MAIL_PASS:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+    ports:
+      - "8080:8080"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    volumes:
+      - ./backend/.env:/app/.env:ro
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: personal-web-app-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+      NEXT_PUBLIC_SITE_NAME: ${NEXT_PUBLIC_SITE_NAME:-"V // Night City Dev"}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  supabase-db-data:

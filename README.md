@@ -64,6 +64,46 @@ This repository contains a personal portfolio / resume web application with a Ne
    Open [http://localhost:3000](http://localhost:3000) to view the site. The frontend talks to the backend using relative `/api/*` endpoints; when running separately the backend must allow CORS from the frontend origin.
 
 
+## Quick Start (Docker)
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- Copy `.env.example` to `.env` and fill in your values
+
+### Run with Docker Compose
+
+```bash
+# Copy environment file
+cp .env.example .env
+
+# Edit .env with your values (database password, JWT secret, etc.)
+
+# Start all services
+docker-compose up --build
+
+# Or run in background
+docker-compose up -d --build
+```
+
+Services will be available at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080
+- **Database**: localhost:5432 (PostgreSQL)
+
+### Docker Services
+
+- **supabase-db**: PostgreSQL database with initialized schema
+- **backend**: Spring Boot application (Java 21)
+- **frontend**: Next.js application (production build)
+
+To stop and clean up:
+```bash
+docker-compose down
+docker-compose down -v  # Also remove volumes
+```
+
+
 ## Environment Variables (Backend)
 
 The backend expects the following (see backend/.env.example):

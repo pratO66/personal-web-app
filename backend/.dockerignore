@@ -1,0 +1,14 @@
+# Backend .dockerignore
+target/
+*.log
+*.tmp
+.env
+.env.local
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+mvnw
+mvnw.cmd
+HELP.md

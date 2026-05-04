@@ -185,3 +185,12 @@ cd frontend && pnpm dev              # http://localhost:3000
 ## Design Corrections Required (P0 — must fix before Phase 3 can be marked done)
 
 ## need to create docker file for backend and frontend, and add docker compose file to run both together with supabase in dev environment. This will make it easier for anyone to run the project locally without worrying about environment setup.
+
+✅ **COMPLETED**: Docker setup created with:
+- `backend/Dockerfile` - Multi-stage Maven build with Corretto 21
+- `frontend/Dockerfile` - Multi-stage Next.js build with pnpm
+- `docker-compose.yml` - Orchestrates backend, frontend, and Supabase Postgres
+- `supabase/init.sql` - Database schema initialization
+- `.env.example` - Environment variables template
+- `.dockerignore` files for both services
+- Updated README.md with Docker instructions
