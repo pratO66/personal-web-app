@@ -1,39 +1,42 @@
-# Frontend Dockerfile
+# ── base ──────────────────────────────────────────────────────────────────────
 FROM node:20-alpine AS base
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
-# Install pnpm
-RUN npm install -g pnpm
-
-# Build stage
-FROM base AS build
-
+# ── deps ──────────────────────────────────────────────────────────────────────
+FROM base AS deps
 WORKDIR /app
-
-# Copy package files
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
+# ── builder ───────────────────────────────────────────────────────────────────
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application
+ARG NEXT_PUBLIC_API_URL=http://localhost:8080
+ARG NEXT_PUBLIC_SITE_NAME="V // Night City Dev"
+ARG NEXT_PUBLIC_SITE_URL=https://example.com
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+    NEXT_PUBLIC_SITE_NAME=$NEXT_PUBLIC_SITE_NAME \
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 RUN pnpm build
 
-# Runtime stage
-FROM base AS runtime
-
+# ── runtime (standalone) ──────────────────────────────────────────────────────
+FROM node:20-alpine AS runtime
 WORKDIR /app
 
-# Copy built application from build stage
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./package.json
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
 
-# Expose port
+# Non-root user (12-factor: security)
+RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
+
+# standalone output bundles a minimal server.js — no node_modules copy needed
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+USER nextjs
 EXPOSE 3000
-
-# Start the application
-CMD ["pnpm", "start"]
+CMD ["node", "server.js"]

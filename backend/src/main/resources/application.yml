@@ -3,3 +3,55 @@ spring:
     name: resume
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc.lob.non_contextual_creation: true
+    show-sql: false
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER:}
+    password: ${MAIL_PASS:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiry-ms: ${JWT_EXPIRY_MS:86400000}
+
+cors:
+  allowed-origins: ${CORS_ORIGIN:http://localhost:3000}
+
+contact:
+  notify-to: ${CONTACT_NOTIFY_TO:${MAIL_USER:}}
+
+admin:
+  username: ${ADMIN_USERNAME:admin}
+  password-hash: ${ADMIN_PASSWORD_HASH:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.resume: INFO

@@ -1,28 +1,29 @@
-# Backend Dockerfile
+# ── build stage ──────────────────────────────────────────────────────────────
 FROM maven:3.9.9-amazoncorretto-21 AS build
-
 WORKDIR /app
 
-# Copy pom.xml and download dependencies (for better caching)
+# Layer dependency downloads separately for better cache reuse
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+RUN mvn dependency:go-offline -B -q
 
-# Copy source code
 COPY src ./src
+RUN mvn clean package -DskipTests -B -q
 
-# Build the application
-RUN mvn clean package -DskipTests
-
-# Runtime stage
-FROM amazoncorretto:21-alpine
-
+# ── runtime stage ─────────────────────────────────────────────────────────────
+FROM amazoncorretto:21-alpine AS runtime
 WORKDIR /app
 
-# Copy the built JAR from build stage
-COPY --from=build /app/target/*.jar app.jar
+# Non-root user (12-factor: security)
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
-# Expose port
+COPY --from=build --chown=appuser:appgroup /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Container-aware JVM flags + fast entropy + exec for proper SIGTERM handling
+ENTRYPOINT ["java", \
+  "-XX:+UseContainerSupport", \
+  "-XX:MaxRAMPercentage=75.0", \
+  "-Djava.security.egd=file:/dev/./urandom", \
+  "-jar", "app.jar"]

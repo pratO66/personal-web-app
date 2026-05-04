@@ -1,35 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db.nxqiuqlwyjimioosaiio.supabase.co:5432/postgres?sslmode=require
-    username: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.nxqiuqlwyjimioosaiio.supabase.co:5432/postgres?sslmode=require}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SUPABASE_DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 5
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc.lob.non_contextual_creation: true
-        format_sql: true
-    show-sql: false
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USER:}
-    password: ${MAIL_PASS:}
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-jwt:
-  secret: ${JWT_SECRET}
-  expiry-ms: 86400000
-cors:
-  allowed-origins: ${CORS_ORIGIN:http://localhost:3000}
-server:
-  port: 8080
-logging:
-  level:
-    org.hibernate.SQL: INFO
+      maximum-pool-size: ${DB_POOL_SIZE:5}
