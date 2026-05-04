@@ -28,11 +28,10 @@ export default function SkillsChart({ skills }: { skills: Skill[] }) {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${
-              filter === f
+            className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${filter === f
                 ? 'border-cp-teal text-cp-teal bg-cp-teal/10'
                 : 'border-cp-border text-cp-text hover:border-cp-teal/60'
-            }`}
+              }`}
           >
             {f}
           </button>
