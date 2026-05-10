@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@Profile("dev")
+@Profile({"dev", "docker"})
 public class SeedRunner implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(SeedRunner.class);
 

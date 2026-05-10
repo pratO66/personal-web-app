@@ -49,6 +49,9 @@ management:
   endpoint:
     health:
       show-details: never
+  health:
+    mail:
+      enabled: false   # mail is optional; don't let unconfigured SMTP pull DOWN overall health
 
 logging:
   pattern:
