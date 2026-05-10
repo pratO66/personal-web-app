@@ -40,7 +40,7 @@ jobs:
       - name: Package
         run: mvn -B package -DskipTests -q
 
-      - name: Upload JAR
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend-jar
@@ -89,6 +89,64 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NEXT_PUBLIC_API_URL: http://localhost:8080
-          NEXT_PUBLIC_SITE_NAME: V // Night City Dev
-          NEXT_PUBLIC_SITE_URL: https://example.com
+          BACKEND_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'http://localhost:8080' }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'http://localhost:8080' }}
+          NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME || 'V // Night City Dev' }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://example.com' }}
+
+  # ── Deploy Backend → Railway (push to main only) ───────────────────────────
+  deploy-backend:
+    name: Deploy → Railway
+    needs: backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy backend to Railway
+        working-directory: backend
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up \
+            --service ${{ secrets.RAILWAY_SERVICE_ID }} \
+            --detach
+
+  # ── Deploy Frontend → Vercel (push to main only) ───────────────────────────
+  deploy-frontend:
+    name: Deploy → Vercel
+    needs: frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: frontend
+
+      - name: Deploy frontend to Vercel (production)
+        working-directory: frontend
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npx vercel --prod --yes --token $VERCEL_TOKEN \
+            --build-env BACKEND_URL=${{ secrets.BACKEND_URL }} \
+            --build-env NEXT_PUBLIC_API_URL=${{ secrets.BACKEND_URL }} \
+            --build-env NEXT_PUBLIC_SITE_NAME="${{ vars.NEXT_PUBLIC_SITE_NAME || 'V // Night City Dev' }}" \
+            --build-env NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL || 'https://frontend-liard-theta-28.vercel.app' }}
