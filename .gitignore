@@ -25,3 +25,4 @@ backend/target/
 .env.*.local
 backend/.env
 backend/src/main/resources/application-prod.yml
+frontend/.vercel
