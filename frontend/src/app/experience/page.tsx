@@ -7,8 +7,8 @@ export const metadata = { title: 'Experience // Night City Dev' }
 export default async function ExperiencePage() {
   const items = await api.getExperience().catch(() => [])
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16">
-      <h1 className="font-[var(--font-display)] text-3xl mb-12 tracking-wider text-center">
+    <section className="max-w-6xl mx-auto px-4 py-10 md:py-16">
+      <h1 className="font-[var(--font-display)] text-2xl sm:text-3xl mb-8 sm:mb-12 tracking-wider text-center">
         <GlitchText text="// CAREER LOG" />
       </h1>
       {items.length === 0 ? (

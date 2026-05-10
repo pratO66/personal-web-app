@@ -10,15 +10,17 @@ const colors: Record<Accent, string> = {
 interface Common {
   accent?: Accent
   children: ReactNode
+  /** Extra Tailwind classes — e.g. "w-full justify-center" for full-width mobile buttons */
+  className?: string
 }
 
 type AsButton = Common & ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined }
-type AsLink = Common & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
+type AsLink   = Common & AnchorHTMLAttributes<HTMLAnchorElement>  & { href: string }
 type Props = AsButton | AsLink
 
-export default function NeonButton({ accent = 'red', children, ...rest }: Props) {
+export default function NeonButton({ accent = 'red', children, className = '', ...rest }: Props) {
   const color = colors[accent]
-  const className = `hud-clip inline-flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-[0.25em] font-[var(--font-mono)] transition-all border bg-transparent hover:bg-[color:var(--bg)] cursor-pointer`
+  const base  = `hud-clip inline-flex items-center gap-2 px-5 py-3 min-h-[44px] text-xs uppercase tracking-[0.25em] font-[var(--font-mono)] transition-all border bg-transparent hover:bg-[color:var(--bg)] cursor-pointer ${className}`
   const style = {
     color,
     borderColor: color,
@@ -28,13 +30,13 @@ export default function NeonButton({ accent = 'red', children, ...rest }: Props)
 
   if ('href' in rest && rest.href) {
     return (
-      <a className={className} style={style} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}>
+      <a className={base} style={style} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}>
         ▶ {children}
       </a>
     )
   }
   return (
-    <button className={className} style={style} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
+    <button className={base} style={style} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
       ▶ {children}
     </button>
   )

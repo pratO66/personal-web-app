@@ -9,8 +9,8 @@ export default async function SkillsPage() {
   const skills = profile?.skills ?? []
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16">
-      <h1 className="font-[var(--font-display)] text-3xl mb-8 tracking-wider">
+    <section className="max-w-6xl mx-auto px-4 py-10 md:py-16">
+      <h1 className="font-[var(--font-display)] text-2xl sm:text-3xl mb-6 sm:mb-8 tracking-wider">
         <GlitchText text="// LOADOUT" />
       </h1>
       {skills.length === 0 ? (

@@ -12,24 +12,34 @@ export default function HeroSection({ profile }: { profile: Profile | null }) {
     )
   }
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-3 gap-6">
-      <div className="md:col-span-2 space-y-6">
+    <section className="max-w-6xl mx-auto px-4 py-10 sm:py-16 md:py-24 grid md:grid-cols-3 gap-6 md:gap-8">
+      <div className="md:col-span-2 space-y-5">
         <p className="text-cp-teal text-xs uppercase tracking-[0.4em] terminal-cursor">
           init: night_city.exe
         </p>
-        <h1 className="font-[var(--font-display)] text-5xl md:text-7xl tracking-tight text-cp-text">
+        {/* Scale down on smallest phones; bump up at sm+ */}
+        <h1 className="font-[var(--font-display)] text-4xl sm:text-5xl md:text-7xl tracking-tight text-cp-text leading-[1.1]">
           <GlitchText text={profile.name} />
         </h1>
-        <p className="font-[var(--font-mono)] text-cp-yellow text-lg">
+        <p className="font-[var(--font-mono)] text-cp-yellow text-base sm:text-lg">
           {'// '}{profile.tagline}
         </p>
-        <p className="max-w-xl text-cp-text/80 leading-relaxed">{profile.bio}</p>
-        <div className="flex flex-wrap gap-3 pt-2">
-          <NeonButton href="/projects" accent="teal">View Projects</NeonButton>
-          <NeonButton href={profile.cvUrl || '/cv.pdf'} accent="yellow">Download CV</NeonButton>
-          <NeonButton href="/contact" accent="red">Contact</NeonButton>
+        <p className="max-w-xl text-cp-text/80 leading-relaxed text-sm sm:text-base">{profile.bio}</p>
+
+        {/* Stack vertically on mobile → row from sm up */}
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-2">
+          <NeonButton href="/projects" accent="teal" className="w-full sm:w-auto justify-center">
+            View Projects
+          </NeonButton>
+          <NeonButton href={profile.cvUrl || '/cv.pdf'} accent="yellow" className="w-full sm:w-auto justify-center">
+            Download CV
+          </NeonButton>
+          <NeonButton href="/contact" accent="red" className="w-full sm:w-auto justify-center">
+            Contact
+          </NeonButton>
         </div>
       </div>
+
       <HUDChrome accent="yellow" title="System Profile">
         <dl className="space-y-3 text-sm font-[var(--font-mono)]">
           <div>

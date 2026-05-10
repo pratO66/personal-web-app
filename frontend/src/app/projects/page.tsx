@@ -7,8 +7,8 @@ export const metadata = { title: 'Projects // Night City Ops' }
 export default async function ProjectsPage() {
   const projects = await api.getProjects().catch(() => [])
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16">
-      <h1 className="font-[var(--font-display)] text-3xl mb-8 tracking-wider">
+    <section className="max-w-6xl mx-auto px-4 py-10 md:py-16">
+      <h1 className="font-[var(--font-display)] text-2xl sm:text-3xl mb-6 sm:mb-8 tracking-wider">
         <GlitchText text="// PROJECTS" />
       </h1>
       {projects.length === 0 ? (
