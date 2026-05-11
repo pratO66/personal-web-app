@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ContactService {
@@ -29,6 +30,7 @@ public class ContactService {
         this.mailTo = mailTo;
     }
 
+    @Transactional
     public Message handle(ContactRequest req) {
         Message m = new Message();
         m.setName(req.name());

@@ -52,6 +52,9 @@
 - [ ] Glitch-on-hover for NeonCard titles
 - [ ] Lighthouse audit + fix a11y contrast issues (`cp-red` on dark may fail WCAG AA)
 - [ ] Replace `cv.pdf` + `og.png` with real assets
+- [x] Add unit tests — JUnit/Mockito backend (JaCoCo 95% threshold) + Vitest frontend (95% threshold)
+- [x] Add GlobalExceptionHandler, OpenAPI/Swagger, @Transactional on ContactService.handle()
+- [x] Repo cleanup: deleted HELP.md + apply-updates.sh, clarified docker-compose local-only comment
 - [ ] Add integration tests with Testcontainers (real Postgres, not H2)
 - [ ] Configure GitHub repo variables: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_NAME`, `NEXT_PUBLIC_SITE_URL` (used by docker-build.yml)
 

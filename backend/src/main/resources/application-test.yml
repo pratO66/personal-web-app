@@ -19,3 +19,13 @@ spring:
 jwt:
   secret: test-secret-key-min-256-bits-long-aaaaaaaaaaaaaaaaaaa
   expiry-ms: 3600000
+
+admin:
+  username: admin
+  password-hash: $2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj8lLxKQZK.
+
+contact:
+  notify-to: ""
+
+cors:
+  allowed-origins: http://localhost:3000

@@ -1,5 +1,9 @@
+## NOTE: This docker-compose is for LOCAL DEVELOPMENT ONLY.
+## Production uses Railway Postgres — set SPRING_DATASOURCE_URL to the Railway connection string
+## and do not run the supabase-db service in production.
+
 services:
-  # Supabase Database
+  # Supabase Database — local-only dev Postgres. Production uses Railway Postgres.
   supabase-db:
     image: supabase/postgres:15.1.0.147
     container_name: personal-web-app-db
