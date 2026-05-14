@@ -1,79 +1,323 @@
 # Remaining Work
 
 ## Phase 1 — Foundation ✅
-
 - [x] Spring Boot 3.5 + JPA + Postgres (Supabase), JWT auth, seed runner
 - [x] Next.js 16 + React 19 + Tailwind 4 + Framer Motion
 - [x] Docker Compose for local development
 - [x] supabase/init.sql schema initialisation
 
 ## Phase 2 — Design system ✅
-
 - [x] CP2077 Neo Militarism palette: `cp-red`, `cp-teal`, `cp-yellow`
 - [x] Rajdhani + Orbitron + Share Tech Mono fonts
 - [x] All components aligned: HUDChrome, Navbar, NeonButton, NeonCard, SkillBar, TerminalInput, ContactForm
 - [x] TypeScript checks pass clean
 
 ## Phase 3 — Resilience & metadata ✅
-
 - [x] `error.tsx` global error boundary with reconnect
-- [x] Per-route `loading.tsx` skeleton loaders (projects, experience, skills, contact)
-- [x] Open Graph + Twitter Card metadata in `layout.tsx`
+- [x] Per-route `loading.tsx` skeleton loaders
+- [x] Open Graph + Twitter Card metadata
 - [x] `cv.pdf` + `og.png` placeholders in `public/`
 
 ## Phase 4 — 12-Factor compliance ✅
-
-- [x] **I Codebase** — single git repo, one codebase → many deploys via env
-- [x] **II Dependencies** — pom.xml (Maven) + pnpm-lock.yaml, fully pinned
-- [x] **III Config** — all secrets/URLs in env vars; application-dev.yml uses `${VAR}` only
-- [x] **IV Backing services** — DB attached via `SPRING_DATASOURCE_URL`; swappable per profile
-- [x] **V Build/release/run** — multi-stage Dockerfiles; CI produces immutable JAR artifact
-- [x] **VI Processes** — stateless Spring Boot (JWT, no server-side session); stateless Next.js
-- [x] **VII Port binding** — `server.port=${PORT:8080}`; frontend `PORT=3000`
-- [x] **VIII Concurrency** — HikariCP pool size via `${DB_POOL_SIZE}`
-- [x] **IX Disposability** — `server.shutdown=graceful` + 30s phase timeout; JVM container flags in Dockerfile
-- [x] **X Dev/prod parity** — Docker profile (`application-docker.yml`); init.sql matches JPA entities; test profile (H2) for CI
-- [x] **XI Logs** — stdout-only; structured console pattern; no log files
-- [x] **XII Admin processes** — `SeedRunner` gated by `@Profile("dev")`; `contextLoads` test uses H2 in-memory
+- [x] All 12 factors implemented and documented
 
 ## Phase 5 — GitHub Actions ✅
+- [x] `ci.yml` — compile + test + deploy (Railway + Vercel) on push to main
+- [x] `docker-build.yml` — GHCR image builds
+- [x] `codeql.yml` + `release.yml` + `dependabot-auto-merge.yml`
 
-- [x] `ci.yml` — backend (Java 21 compile + H2 test + package) + frontend (typecheck + lint + build); runs on push/PR
-- [x] `docker-build.yml` — builds + pushes backend and frontend images to GHCR on push to main
-- [x] Removed 9 broken/redundant template workflows (docker-image, nextjs, node.js, static, maven-publish, manual, sonarcloud, codacy, super-linter)
-- [x] Kept: `stale.yml`, `summary.yml`
+## Phase 6 — Quality & Ops ✅
+- [x] 95% test coverage: 42 backend tests (JaCoCo) + 66 frontend tests (Vitest)
+- [x] GlobalExceptionHandler, OpenAPI/Swagger, @Transactional
+- [x] Supabase: GIN indexes, updated_at trigger, pg_stat_statements, deny-all RLS
+- [x] Vercel: security headers, API proxy rewrite, pnpm pinned
+- [x] Railway: railway.toml, health check, restart policy
+- [x] Mobile + tablet responsive polish (44px touch targets, stacked buttons, etc.)
+- [x] Dependabot: auto-merge patch/minor, flag major
 
-## Remaining — Polish (Phase 6)
-
-- [ ] Framer Motion scroll-reveal on ExperienceTimeline items (stagger by index)
-- [ ] Hero terminal/boot typewriter animation (`init: night_city.exe ▍`)
+## Phase 7 — Polish (in progress)
+- [ ] Framer Motion scroll-reveal on ExperienceTimeline (stagger by index)
+- [ ] Hero typewriter boot animation (`init: night_city.exe ▍`)
 - [ ] Neon-pulse on active navbar link
 - [ ] Particle field canvas in hero background
 - [ ] Glitch-on-hover for NeonCard titles
-- [ ] Lighthouse audit + fix a11y contrast issues (`cp-red` on dark may fail WCAG AA)
-- [ ] Replace `cv.pdf` + `og.png` with real assets
-- [x] Add unit tests — JUnit/Mockito backend (JaCoCo 95% threshold) + Vitest frontend (95% threshold)
-- [x] Add GlobalExceptionHandler, OpenAPI/Swagger, @Transactional on ContactService.handle()
-- [x] Repo cleanup: deleted HELP.md + apply-updates.sh, clarified docker-compose local-only comment
-- [ ] Add integration tests with Testcontainers (real Postgres, not H2)
-- [ ] Configure GitHub repo variables: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_NAME`, `NEXT_PUBLIC_SITE_URL` (used by docker-build.yml)
+- [ ] Lighthouse audit + WCAG AA contrast fixes (`cp-red` on dark)
+- [ ] Replace `cv.pdf` + `og.png` placeholders with real assets
+- [ ] Add integration tests with Testcontainers (real Postgres)
 
-## Deployment (out of scope — when ready)
+---
 
-- [ ] Frontend → Vercel (`vercel.json` or MCP connector)
-- [ ] Backend → Railway / Render / Fly (JAR or Docker image from GHCR)
-- [ ] Set all production env vars (never in files)
-- [ ] Switch `SPRING_DATASOURCE_URL` to Supabase connection pooler for production
-- [ ] Generate real `ADMIN_PASSWORD_HASH` via `htpasswd -bnBC 12 "" "pw" | tr -d ':\n'`
+## Phase 8 — Analytics (Agent: analytics-agent)
+**Connector:** Amplitude (appId `814849`, 10k events/mo starter plan)
+
+- [ ] Install `@amplitude/analytics-browser` in frontend
+- [ ] Track: `page_viewed` (route + referrer), `cv_downloaded`, `contact_submitted`,
+      `project_link_clicked` (demo/repo), `skill_filter_changed`, `experience_viewed`
+- [ ] Create Amplitude dashboard: Unique visitors · Top pages · Contact conversion rate
+- [ ] Add `pnpm test:coverage` Amplitude event on CI pass (optional)
+- [ ] Backend: log structured JSON events for Railway health + contact submissions
+- [ ] Supabase: `analytics_events` table for server-side event mirror
+
+---
+
+## Phase 9 — Spotify Integration (Agent: spotify-agent)
+**Track:** "The Rebel Path" by Refused (Cyberpunk 2077 OST) · Spotify track embed
+
+- [ ] Add `SpotifyPlayer` component — Spotify iframe embed (no auth required)
+- [ ] Mount in HeroSection below the buttons, collapsed by default
+- [ ] Expand on first user interaction (solves browser autoplay block)
+- [ ] Pulse animation synced to play state (CSS, no Web Audio needed)
+- [ ] `NEXT_PUBLIC_SPOTIFY_TRACK_ID` env var so track can be swapped
+
+**Note:** Full autoplay on page load is blocked by all major browsers. Embed widget
+lets user click ▶ once — stays collapsed until then.
+
+---
+
+## Phase 10 — Citation / Credits Page (Agent: citation-agent)
+
+- [ ] New route `/credits` — `app/credits/page.tsx`
+- [ ] Add "CREDITS" link to Navbar
+- [ ] Sections:
+  - **Stack** — all libraries, frameworks, and tools with links + license
+  - **Design** — Cyberpunk 2077 CP2077 Neo Militarism design language credit
+  - **Music** — "The Rebel Path" · Refused · Cyberpunk 2077 OST · CD PROJEKT RED
+  - **Fonts** — Orbitron (Google Fonts), Share Tech Mono, Rajdhani
+  - **Hosting** — Vercel, Railway, Supabase
+  - **Inspiration** — developer portfolios referenced
+- [ ] HUDChrome-styled cards per section, cyberpunk aesthetic
+
+---
+
+## Phase 11 — Job Application Tracker (Agent: job-tracker-agent)
+**Access:** Admin-protected (`/admin/jobs`)
+
+### Backend
+- [ ] Supabase migration: `job_applications` table
+  ```sql
+  id, company, role, url, source (LinkedIn/Referral/…), status
+  (Bookmarked/Applied/Phone Screen/Technical/Final/Offer/Rejected/Ghosted),
+  applied_at, last_updated, notes, salary_min, salary_max, currency
+  ```
+- [ ] Spring Boot: `JobApplication` entity + repo + service + controller (`/api/admin/jobs/**`)
+- [ ] CRUD endpoints: POST create · GET list (filterable by status) · PATCH update status · DELETE
+
+### Frontend
+- [ ] `/admin/jobs` page (admin-gated, client component)
+- [ ] Kanban-style status board using HUDChrome cards per column
+- [ ] Add/edit modal using TerminalInput components
+- [ ] Status badge with cp-red/cp-yellow/cp-teal colour coding
+- [ ] Export to CSV button
+
+---
+
+## Phase 12 — Market Research Engine (Agent: market-research-agent)
+**API:** Adzuna Jobs API (free, 250 calls/day) · No scraping
+
+### Backend
+- [ ] Spring Boot `MarketResearchService`:
+  - Calls Adzuna `/v1/api/jobs/{country}/search` with role keywords from profile
+  - Extracts top N required skills from job descriptions (regex + keyword frequency)
+  - Stores results in Supabase `market_insights` table (TTL 24h)
+- [ ] Scheduled job (`@Scheduled(cron = "0 0 * * * *")`) refreshes every night
+- [ ] Endpoint: `GET /api/admin/market/insights` → top skills, avg salary, job count by role
+- [ ] Env vars: `ADZUNA_APP_ID`, `ADZUNA_APP_KEY`
+
+### Frontend
+- [ ] `/admin/market` page — top skills radar chart vs your current skills
+- [ ] Salary band per role with market median overlay
+- [ ] "Skill gaps" section: skills in demand you don't list on your profile
+- [ ] "Resume suggestions" list auto-generated from gap analysis
+
+---
+
+## Phase 13 — Resume Auto-Updater (Agent: resume-updater-agent)
+**Depends on:** Phase 12 (market insights)
+
+### Backend
+- [ ] `ResumeUpdateService`:
+  - Reads market insights (Phase 12) + current `profile` from Supabase
+  - Generates diff: missing skills, outdated tagline, under-represented highlights
+  - Returns structured `ResumeSuggestion` objects (field, current value, suggested value, confidence)
+- [ ] `POST /api/admin/resume/suggestions` — returns suggestions
+- [ ] `POST /api/admin/resume/apply` — applies approved suggestions to `profile` table
+- [ ] Audit log in Supabase `resume_change_log` (field, old, new, applied_at)
+
+### Frontend
+- [ ] `/admin/resume` page — split view: current profile left, suggestions right
+- [ ] Per-suggestion: Accept / Dismiss / Edit-then-Accept actions
+- [ ] Confidence score badge (High/Medium/Low) on each suggestion
+- [ ] "Apply All Accepted" bulk action → calls `/api/admin/resume/apply`
+- [ ] After apply: triggers Vercel redeploy via API so live site updates
+
+---
+
+## Phase 14 — LinkedIn Sync (Agent: linkedin-agent)
+**Approach:** LinkedIn data export (no scraping) + manual OAuth import
+
+> **Why not full API?** LinkedIn's r_member_social scope (reading your own posts)
+> requires app review and is granted to very few developers. The data export
+> approach is ToS-compliant and gives full fidelity.
+
+- [ ] Supabase: `linkedin_snapshots` table (exported JSON blobs + parsed fields)
+- [ ] Backend `LinkedInParserService`:
+  - Accepts uploaded LinkedIn data export ZIP (from Settings → Data Privacy → Export)
+  - Parses `Profile.csv`, `Positions.csv`, `Skills.csv`, `Recommendations_Received.csv`
+  - Maps to `profile` + `experience` table updates
+  - Returns diff preview before applying
+- [ ] `POST /api/admin/linkedin/import` — multipart upload → parsed diff
+- [ ] `POST /api/admin/linkedin/apply` — applies diff to Supabase
+- [ ] Frontend `/admin/linkedin` page — upload zone + diff review
+
+### LinkedIn Share Output (auto-generate, not auto-post)
+- [ ] "Generate LinkedIn Post" button on each project/experience entry
+- [ ] Uses profile + project data to draft a LinkedIn-ready post (copyable)
+- [ ] "Generate Updated Summary" — drafts a new LinkedIn About section from current profile
+
+---
+
+## Phase 15 — Developer Benchmarking (Agent: dev-benchmark-agent)
+**API:** GitHub public API (no auth needed, 60 req/hr · 5000 req/hr with token)
+
+### Data collected per developer
+- Public repos count · Stars received · Forks · Top languages (by bytes)
+- Contribution streak · Pinned repos · Account age
+
+### Backend
+- [ ] `GitHubBenchmarkService`: fetches your profile + compares against a curated
+      list of 20–50 target developers (stored in `benchmark_peers` table)
+- [ ] `BenchmarkResult`: percentile rank per language, repos, stars, contribution frequency
+- [ ] Cache results in Supabase `github_benchmarks` (TTL 7d)
+- [ ] `GET /api/profile/benchmark` — public endpoint (no auth)
+- [ ] Env var: `GITHUB_TOKEN` (optional, increases rate limit)
+
+### Frontend
+- [ ] Public `/benchmark` page — radar chart: your GitHub stats vs peer median
+- [ ] Language breakdown bar chart (your distribution vs peers)
+- [ ] "Top peers" leaderboard (anonymised by default, opt-in to show username)
+- [ ] "Add peer" widget (admin-only, adds GitHub handle to benchmark list)
+
+---
+
+## Phase 16 — Professional Development Dashboard (Agent: pro-dev-agent)
+**Access:** Admin-only (`/admin/growth`)
+
+### Data sources
+- Your `profile.skills` + `experience` (Supabase)
+- Market insights (Phase 12)
+- GitHub benchmarks (Phase 15)
+- Manual learning log (new table)
+
+### Backend
+- [ ] Supabase migration: `learning_log` table
+  ```sql
+  id, resource_type (Course/Book/Cert/Project/Talk), title, provider,
+  url, status (In Progress/Completed/Planned), completed_at, notes
+  ```
+- [ ] `GET /api/admin/growth/summary` — aggregated snapshot (skills coverage %, learning velocity, next recommended skills)
+- [ ] `POST /api/admin/growth/log` + PATCH/DELETE — CRUD for learning log
+
+### Frontend
+- [ ] `/admin/growth` page with 4 panels:
+  1. **Skill coverage** — your skills vs top-10 market skills (filled radar)
+  2. **Learning log** — kanban: Planned → In Progress → Completed
+  3. **GitHub activity** — contribution calendar embed (github-readme-stats iframe)
+  4. **Next 3 recommended skills** — derived from market gaps + current trajectory
+
+---
+
+## Agent Orchestration Plan
+
+```
+ORCHESTRATOR (root agent)
+│
+├─► analytics-agent         Phase 8   — Amplitude SDK + events + dashboard
+├─► spotify-agent           Phase 9   — SpotifyPlayer component + hero mount
+├─► citation-agent          Phase 10  — /credits route + data + styling
+│
+├─► job-tracker-agent       Phase 11  — DB migration + API + Kanban UI
+│
+├─► market-research-agent   Phase 12  — Adzuna integration + nightly scheduler
+│   └─► resume-updater-agent Phase 13 — depends on market insights
+│
+├─► linkedin-agent          Phase 14  — data export parser + diff UI
+│
+├─► dev-benchmark-agent     Phase 15  — GitHub API + radar chart
+│   └─► pro-dev-agent       Phase 16  — depends on benchmarks + market data
+│
+└─► polish-agent            Phase 7   — animations, Lighthouse, real assets
+```
+
+### Sub-agent contracts
+Each sub-agent receives:
+- Project root path: `/Users/prathamsachan/Desktop/personal-web-app`
+- Backend package root: `com.resume`
+- Frontend src root: `frontend/src`
+- Active Spring profile: `docker` (Railway) / `dev` (local)
+- Supabase project ID: `nxqiuqlwyjimioosaiio`
+- Coding standards: Java 21 records/sealed types where appropriate; TypeScript strict; Tailwind 4 CSS-first tokens; no inline styles except dynamic colour values
+- Test requirement: every new backend class ≥ 95% JaCoCo coverage; every new frontend component has a Vitest test file
+- Commit convention: `feat(phase-N): description` with Co-Authored-By trailer
+
+### Execution order
+```
+Parallel batch 1 (no dependencies):
+  analytics-agent · spotify-agent · citation-agent · polish-agent
+
+Sequential batch 2 (job tracker is standalone):
+  job-tracker-agent
+
+Sequential batch 3 (market research must finish first):
+  market-research-agent → resume-updater-agent
+
+Parallel batch 4 (independent of batch 3):
+  linkedin-agent · dev-benchmark-agent
+
+Sequential batch 5 (needs batch 3 + 4):
+  pro-dev-agent
+```
+
+### Environment variables needed (add to .env.example)
+```bash
+# Phase 8 — Amplitude
+NEXT_PUBLIC_AMPLITUDE_API_KEY=
+
+# Phase 9 — Spotify
+NEXT_PUBLIC_SPOTIFY_TRACK_ID=5HTHMQ8wMAlF6cEo6bx0aL   # The Rebel Path
+
+# Phase 12 — Adzuna
+ADZUNA_APP_ID=
+ADZUNA_APP_KEY=
+
+# Phase 15 — GitHub
+GITHUB_TOKEN=   # optional; increases rate limit from 60 to 5000 req/hr
+GITHUB_USERNAME=justcallmepratt
+
+# Phase 15 — Benchmark peers (comma-separated GitHub usernames)
+BENCHMARK_PEERS=torvalds,gaearon,addyosmani,kentcdodds,tj
+```
+
+---
+
+## Deployment (live ✅)
+- **Frontend** → https://frontend-liard-theta-28.vercel.app
+- **Backend** → https://personal-web-app-backend-production.up.railway.app
+- **DB** → Supabase `nxqiuqlwyjimioosaiio` (Railway internal Postgres + Supabase analytics)
+- **Swagger UI** → `{backend-url}/swagger-ui/index.html`
 
 ## How to run locally
-
 ```bash
-# Docker (all services — recommended)
-cp .env.example .env      # fill in SUPABASE_DB_PASSWORD, JWT_SECRET
-docker compose up
-
-# Manual dev
+# Manual dev (recommended)
 cd backend && ./run-dev.sh   # Spring Boot :8080, reads backend/.env
 cd frontend && pnpm dev      # Next.js :3000
+```
+
+## How to run agents
+```bash
+# From repo root — example: spin up analytics agent
+claude --agent analytics-agent "Implement Phase 8 per REMAINING_WORK.md"
+
+# Full orchestration run (run from repo root)
+claude "Read REMAINING_WORK.md agent orchestration plan and execute all phases
+        in the documented parallel/sequential batches. Report blockers."
 ```
