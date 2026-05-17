@@ -35,7 +35,45 @@
 - [x] Mobile + tablet responsive polish (44px touch targets, stacked buttons, etc.)
 - [x] Dependabot: auto-merge patch/minor, flag major
 
+## Connector Status (validated 2026-05-16)
+
+All MCP connectors probed and documented. Use this as the canonical reference.
+
+| Connector | Tool prefix | Status | Verified capability |
+|---|---|---|---|
+| **Supabase** | `mcp__supabase__*` | ✅ Live | Migrations, advisors, SQL, GIN indexes, RLS |
+| **Vercel** | `mcp__92c0163a__*` | ✅ Live | Deploy, env vars, runtime logs, domain check |
+| **Google Calendar** | `mcp__3a7aa2e0__*` | ✅ Live | Create/update/delete events, recurring events |
+| **Gmail** | `mcp__faebe781__*` | ✅ Live (read+label) | Search threads, list/create labels |
+| **Notion** | `mcp__fdd91680__*` | ✅ Live | Fetch, create, update pages + databases |
+| **Amplitude** | `mcp__47ca1c18__*` | ✅ Live | Tracking plan, dashboards, charts, events, session replay — org `cold-hall-104153`, project `814849` |
+| **Railway** | CLI `railway` | ✅ Live (permanent token) | Deploy, logs, env vars, service management |
+| **Chrome Preview** | `mcp__Claude_Preview__*` | ✅ Live | Screenshots at any viewport, click, fill |
+| **Figma** | `mcp__Figma__*` | ⚙️ Needs action | Enable Dev Mode MCP in Figma desktop app |
+| **Slack** | `mcp__plugin_design_slack__*` | 🔗 OAuth pending | OAuth URL generated — user must authorize |
+| **GitHub Copilot** | `mcp__plugin_engineering_github__*` | 🔗 OAuth pending | Needs Copilot subscription + OAuth |
+| **Google Drive** | `mcp__79b7446a__*` | ✅ Live (read) | List, read, search, metadata |
+| **Figma plugin** | `mcp__ae6d6b45__*` | ⚠️ Disconnected | Use `mcp__Figma__*` instead |
+
+### What each live connector adds to this project
+- **Amplitude** → create dashboards before Phase 8 SDK is wired (define schema now)
+- **Google Calendar** → deploy reminders, maintenance windows
+- **Gmail** → monitor contact form emails, verify SMTP config
+- **Notion** → living documentation, pitch deck, idea board
+- **Google Drive** → store CV PDF, OG images, design assets
+- **Supabase** → all DB work (migrations, performance, security)
+- **Vercel** → all frontend deploys + env var management
+- **Railway** → all backend deploys + service logs
+
+### Action needed to unlock remaining connectors
+- [ ] **Figma:** Open Figma desktop → Figma menu → Preferences → Enable Dev Mode MCP Server → restart Claude
+- [ ] **Slack:** Authorize at `https://slack.com/oauth/v2_user/authorize?...` (URL in session)
+- [ ] **GitHub Copilot:** Requires GitHub Copilot subscription + OAuth flow
+
+---
+
 ## Phase 7 — Polish (in progress)
+- [x] OLED background: pure black `#000000` + `#0A0A10` panels (neons pop on OLED)
 - [ ] Framer Motion scroll-reveal on ExperienceTimeline (stagger by index)
 - [ ] Hero typewriter boot animation (`init: night_city.exe ▍`)
 - [ ] Neon-pulse on active navbar link

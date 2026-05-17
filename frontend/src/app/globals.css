@@ -4,8 +4,9 @@
   --color-cp-red: #C5003C;
   --color-cp-teal: #55EAD4;
   --color-cp-yellow: #F3E600;
-  --color-cp-dark: #0D0D0D;
-  --color-cp-panel: #111318;
+  /* Pure black for OLED — pixels fully off, maximum contrast with neons */
+  --color-cp-dark: #000000;
+  --color-cp-panel: #0A0A10;
   --color-cp-border: #1E2235;
   --color-cp-muted: #4A4F6A;
   --color-cp-text: #C8CDD8;
@@ -104,16 +105,17 @@
 
 html,
 body {
-  background: #0D0D0D;
+  background: #000000;
   color: #C8CDD8;
   min-height: 100%;
   font-family: var(--font-mono);
 }
 
 body {
+  /* Slightly brighter grid lines against true black for depth */
   background-image:
-    linear-gradient(#1E223544 1px, transparent 1px),
-    linear-gradient(90deg, #1E223544 1px, transparent 1px);
+    linear-gradient(#1E223560 1px, transparent 1px),
+    linear-gradient(90deg, #1E223560 1px, transparent 1px);
   background-size: 40px 40px;
   background-attachment: fixed;
 }
