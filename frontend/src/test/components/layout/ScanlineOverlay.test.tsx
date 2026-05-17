@@ -1,4 +1,4 @@
-import { render, container } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import ScanlineOverlay from '@/components/layout/ScanlineOverlay'
 
