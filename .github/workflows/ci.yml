@@ -141,12 +141,29 @@ jobs:
             exit 1
           fi
 
-  # ── Deploy Frontend → Vercel (push to main only) ───────────────────────────
+  # ── Deploy Frontend → Vercel via prebuilt (push to main only) ─────────────
+  # WHY PREBUILT:
+  #   `vercel --prod` triggers Vercel to clone from GitHub and build there.
+  #   The project's rootDirectory was not set to "frontend", so Vercel built
+  #   from the repo root and couldn't find Next.js (no package.json at root).
+  #
+  #   Prebuilt deployment solves this: CI builds the Next.js app here (where
+  #   we control the working directory), then ships the build output to Vercel.
+  #   Vercel only serves the assets — no GitHub clone, no framework detection.
+  #
+  # ALTERNATIVE (one-time dashboard fix):
+  #   Vercel dashboard → project "frontend" → Settings → Root Directory → "frontend"
+  #   After that you can revert to a simple `vercel --prod` deployment.
   deploy-frontend:
     name: Deploy → Vercel
     needs: frontend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
     steps:
       - uses: actions/checkout@v6
@@ -159,19 +176,23 @@ jobs:
         with:
           version: 9
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        working-directory: frontend
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
 
-      - name: Deploy frontend to Vercel (production)
+      - name: Pull Vercel project settings
         working-directory: frontend
+        run: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+
+      - name: Build frontend (CI runner — controls env vars)
+        working-directory: frontend
+        run: vercel build --prod --token=$VERCEL_TOKEN
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: |
-          npx vercel --prod --yes --token $VERCEL_TOKEN \
-            --build-env BACKEND_URL=${{ secrets.BACKEND_URL }} \
-            --build-env NEXT_PUBLIC_API_URL=${{ secrets.BACKEND_URL }} \
-            --build-env NEXT_PUBLIC_SITE_NAME="${{ vars.NEXT_PUBLIC_SITE_NAME || 'V // Night City Dev' }}" \
-            --build-env NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL || 'https://frontend-liard-theta-28.vercel.app' }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.BACKEND_URL }}
+          NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME || 'V // Night City Dev' }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://frontend-liard-theta-28.vercel.app' }}
+          NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
+
+      - name: Deploy prebuilt output to Vercel production
+        working-directory: frontend
+        run: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
