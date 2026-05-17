@@ -36,6 +36,9 @@ cors:
 
 contact:
   notify-to: ${CONTACT_NOTIFY_TO:${MAIL_USER:}}
+  rate-limit:
+    max-submissions: ${CONTACT_RATE_LIMIT_MAX:3}
+    window-seconds:  ${CONTACT_RATE_LIMIT_WINDOW:3600}
 
 admin:
   username: ${ADMIN_USERNAME:admin}
