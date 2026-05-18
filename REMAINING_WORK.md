@@ -1,5 +1,8 @@
 # Remaining Work
 
+> 📊 **Last validated end-to-end:** 2026-05-18 — see [`docs/VALIDATION.md`](docs/VALIDATION.md) for the full report.
+> Production live · 241/241 tests green · email validation + rate limiting confirmed working in prod.
+
 ## Phase 1 — Foundation ✅
 - [x] Spring Boot 3.5 + JPA + Postgres (Supabase), JWT auth, seed runner
 - [x] Next.js 16 + React 19 + Tailwind 4 + Framer Motion
