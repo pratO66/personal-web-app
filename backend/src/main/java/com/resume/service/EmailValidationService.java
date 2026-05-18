@@ -102,6 +102,11 @@ public class EmailValidationService {
             return ValidationResult.reject("Invalid email format.");
         }
 
+        // Spaces are never valid in unquoted email addresses
+        if (email.contains(" ")) {
+            return ValidationResult.reject("Email addresses cannot contain spaces.");
+        }
+
         String domain = email.substring(email.lastIndexOf('@') + 1).toLowerCase().trim();
 
         // 1. Disposable provider
